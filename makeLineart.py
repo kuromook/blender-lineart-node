@@ -8,6 +8,15 @@ def makeLineart(name="lineartWhite"):
     edge_threshold = 44
     line_thickness = 1.1
 
+    s = bpy.context.scene
+    percentage = s.render.resolution_percentage
+    x = s.render.resolution_x * percentage / 100
+    y = s.render.resolution_y * percentage / 100
+    size = x if x >= y else y
+
+    edge_threshold += int( size / 500) * 10
+    line_thickness += int( size / 2000)
+
     # apply white material and edge
     for item in bpy.data.objects:
         if item.type == 'MESH':

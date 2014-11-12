@@ -66,16 +66,19 @@ alpha = n.new("CompositorNodeAlphaOver")
 rgb2Bw = n.new("CompositorNodeRGBToBW")
 val2Rgb = n.new("CompositorNodeValToRGB")
 setAlpha = n.new("CompositorNodeSetAlpha")
+dilate = n.new("CompositorNodeDilateErode")
 
 rgb2Bw.location = (200, 100)
 val2Rgb.location = (400, 100)
 alpha.location = (900,300)
 setAlpha.location = (700, 500)
+dilate.location = (400, 400)
 
 l.new(render.outputs[0], rgb2Bw.inputs[0])
 l.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
 l.new(val2Rgb.outputs[0], setAlpha.inputs[0])
-l.new(render.outputs['Alpha'], setAlpha.inputs[1])
+l.new(render.outputs['Alpha'], dilate.inputs[0])
+l.new(dilate.outputs[0], setAlpha.inputs[1])
 l.new(setAlpha.outputs[0],alpha.inputs[1])
 
 l.new(freestyleRender.outputs[0], alpha.inputs[2])
@@ -87,8 +90,27 @@ val2Rgb.color_ramp.interpolation = 'CONSTANT'
 #val2Rgb.color_ramp.color_mode="HSV"
 #val2Rgb.color_ramp.hue_interpolation = 'near'
 
+dilate.distance = -1
 
 val2Rgb.color_ramp.elements[1].color = (1, 1, 1, 1)
 val2Rgb.color_ramp.elements[0].color = (0.279524, 0.279524, 0.279524, 1)
 val2Rgb.color_ramp.elements[1].position=0.08
 val2Rgb.color_ramp.elements[1].position=0.0
+
+
+# output to image file
+import os
+lineout = n.new("CompositorNodeOutputFile")
+lineout.name = "line out"
+lineout.location = (200, 600)
+
+lineout.base_path = os.path.expanduser("~/Desktop/l")
+
+grayout = n.new("CompositorNodeOutputFile")
+grayout.name = "gray out"
+grayout.location = (1200, 600)
+grayout.base_path = os.path.expanduser("~/Desktop/g")
+
+
+l.new(freestyleRender.outputs[0], lineout.inputs[0])
+l.new(setAlpha.outputs[0], grayout.inputs[0])
