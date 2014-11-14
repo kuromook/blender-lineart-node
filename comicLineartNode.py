@@ -6,15 +6,15 @@ def comicLineartNode():
      
     s = bpy.context.scene
 
-    edge_threshold = 44
     line_thickness = 1.1
+    edge_threshold = 44
 
     percentage = s.render.resolution_percentage
     x = s.render.resolution_x * percentage / 100
     y = s.render.resolution_y * percentage / 100
     size = x if x >= y else y
 
-    edge_threshold += int( size / 500) * 10
+    edge_threshold += int( size / 500) * 40
     line_thickness += int( size / 2000)
 
 
@@ -24,6 +24,9 @@ def comicLineartNode():
 
     s.render.use_edge_enhance = True
     s.render.edge_threshold = edge_threshold
+
+    #s.render.layers.active.freestyle_settings.crease_angle = 1.2
+
 
     # render layer setting
     f = s.render.layers.active
@@ -140,6 +143,14 @@ def comicLineartNode():
 
 
 
+def objectJoin():
+    for ob in bpy.context.scene.objects:
+        if ob.type == 'MESH':
+            ob.select = True
+            bpy.context.scene.objects.active = ob
+        else:
+            ob.select = False
+    bpy.ops.object.join()
 
 
 
@@ -161,6 +172,7 @@ class ComicLineartNode(bpy.types.Operator):
 
     def execute(self, context):    
         comicLineartNode()
+        objectJoin()
         return {'FINISHED'}
 
 

@@ -1,11 +1,9 @@
 # this script convert setting to monochrome lineart for comics
 import bpy
-
-
 # set white materials whole objects, then set edge and freestyle line
 def makeLineart(name="lineartWhite"):
 
-    edge_threshold = 44
+    edge_threshold = 200
     line_thickness = 1.1
 
     s = bpy.context.scene
@@ -14,13 +12,15 @@ def makeLineart(name="lineartWhite"):
     y = s.render.resolution_y * percentage / 100
     size = x if x >= y else y
 
-    edge_threshold += int( size / 500) * 10
+    edge_threshold += int( size / 500) * 40
     line_thickness += int( size / 2000)
 
     # apply white material and edge
     for item in bpy.data.objects:
         if item.type == 'MESH':
             item.data.materials.append(bpy.data.materials[name])
+
+    s.render.layers.active.freestyle_settings.crease_angle = 1.2
 
     bpy.context.scene.render.use_edge_enhance = True
     bpy.context.scene.render.edge_threshold = edge_threshold
@@ -72,6 +72,35 @@ def clearObjects():
                 item.data.materials.pop(0, update_data=True)
     return
 
+def outputFile():
+    s = bpy.context.scene
+    s.use_nodes = True
+
+    r = s.render.layers.active
+    n = s.node_tree.nodes
+    l = s.node_tree.links
+    
+
+    render = n["Render Layers"]
+    render.layer = 'RenderLayer'
+    render.location = (0, 0)
+
+    import os
+    mergeout = n.new("CompositorNodeOutputFile")
+    mergeout.name = "merge out"
+    mergeout.location = (400, 100)
+    mergeout.base_path = os.path.expanduser("~/Desktop/rendering/w")
+    mergeout.file_slots.new("rendering")
+    l.new(render.outputs[0], mergeout.inputs[-1])
+
+def objectJoin():
+    for ob in bpy.context.scene.objects:
+        if ob.type == 'MESH':
+            ob.select = True
+            bpy.context.scene.objects.active = ob
+        else:
+            ob.select = False
+    bpy.ops.object.join()
 
 ################### add on setting section###########################
 bl_info = {
@@ -92,6 +121,8 @@ class ComicLineart(bpy.types.Operator):
         clearObjects()
         addLineartMaterial()
         makeLineart()
+        objectJoin()
+        outputFile()
         return {'FINISHED'}
 
 

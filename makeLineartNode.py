@@ -11,7 +11,7 @@ x = s.render.resolution_x * percentage / 100
 y = s.render.resolution_y * percentage / 100
 size = x if x >= y else y
 
-edge_threshold += int( size / 500) * 10
+edge_threshold += int( size / 500) * 40
 line_thickness += int( size / 2000)
 
 
