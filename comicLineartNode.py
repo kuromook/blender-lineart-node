@@ -17,6 +17,7 @@ def comicLineartNode():
     edge_threshold += int( size / 500) * 40
     line_thickness += int( size / 2000)
 
+    s.render.image_settings.file_format = 'PNG'
 
     s.render.use_freestyle = True
     s.render.alpha_mode = 'TRANSPARENT'
@@ -49,9 +50,10 @@ def comicLineartNode():
     bpy.data.linestyles["LineStyle"].thickness_ratio = 0
 
 
-    s.use_nodes = True
-
     # nodes
+    s.use_nodes = True
+        
+
     n = s.node_tree.nodes
     l = s.node_tree.links
     g = bpy.data.node_groups
@@ -73,12 +75,14 @@ def comicLineartNode():
     val2Rgb = n.new("CompositorNodeValToRGB")
     setAlpha = n.new("CompositorNodeSetAlpha")
     dilate = n.new("CompositorNodeDilateErode")
+    viewer = n.new("CompositorNodeViewer")
 
     rgb2Bw.location = (200, 100)
     val2Rgb.location = (400, 100)
     alpha.location = (900,300)
     setAlpha.location = (700, 500)
     dilate.location = (400, 400)
+    viewer.location = (1300, 350)
 
     rgb = n.new("CompositorNodeRGB")
     alphaMerge = n.new("CompositorNodeAlphaOver")
@@ -94,6 +98,7 @@ def comicLineartNode():
     l.new(render.outputs['Alpha'], dilate.inputs[0])
     l.new(dilate.outputs[0], setAlpha.inputs[1])
     l.new(setAlpha.outputs[0],alpha.inputs[1])
+    l.new(alpha.outputs[0], viewer.inputs[0])
 
     l.new(freestyleRender.outputs[0], alpha.inputs[2])
     l.new(alpha.outputs[0], composite.inputs[0])
@@ -102,7 +107,6 @@ def comicLineartNode():
     l.new(dilate.outputs[0], setAlphaMerge.inputs[1])
     l.new(setAlphaMerge.outputs[0], alphaMerge.inputs[1])
     l.new(freestyleRender.outputs[0], alphaMerge.inputs[2])
-
     # gray setting
     val2Rgb.color_ramp.interpolation = 'CONSTANT'
     #val2Rgb.color_ramp.color_mode="HSV"
@@ -117,7 +121,8 @@ def comicLineartNode():
 
     rgb.outputs[0].default_value = (1,1,1,1)
 
-    # output to image file
+    # output to image files
+    # l : line art only, g : gray only, m : line art and white alpha maerged
     import os
     lineout = n.new("CompositorNodeOutputFile")
     lineout.name = "line out"
@@ -142,7 +147,17 @@ def comicLineartNode():
     l.new(alphaMerge.outputs[0], mergeout.inputs[-1])
 
 
+# back drop on
+def useBackDrop():
+    a = bpy.context.area
+    a_temp = a.type
+    a.type = 'NODE_EDITOR'
+    space = a.spaces.active
+    space.show_backdrop = True
+    a.type = a_temp
 
+
+# join objects to clear non-manified edges
 def objectJoin():
     for ob in bpy.context.scene.objects:
         if ob.type == 'MESH':
@@ -170,7 +185,8 @@ class ComicLineartNode(bpy.types.Operator):
     bl_label = "comic lineart node"
     bl_options = {'REGISTER', 'UNDO'}
 
-    def execute(self, context):    
+    def execute(self, context):  
+        useBackDrop()  
         comicLineartNode()
         objectJoin()
         return {'FINISHED'}

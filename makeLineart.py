@@ -72,6 +72,7 @@ def clearObjects():
                 item.data.materials.pop(0, update_data=True)
     return
 
+# set nodes for image file
 def outputFile():
     s = bpy.context.scene
     s.use_nodes = True
@@ -93,7 +94,10 @@ def outputFile():
     mergeout.file_slots.new("rendering")
     l.new(render.outputs[0], mergeout.inputs[-1])
 
+
+# join objects to clear non-manified edges
 def objectJoin():
+
     for ob in bpy.context.scene.objects:
         if ob.type == 'MESH':
             ob.select = True
