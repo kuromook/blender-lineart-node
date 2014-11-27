@@ -180,36 +180,60 @@ def materialNodes(m,isWhite=True):
 
     # create nodes
     material = n.new("ShaderNodeExtendedMaterial")
-    color_ramp = n.new("ShaderNodeValToRGB")
     output = n.new("ShaderNodeOutput")
     mix = n.new("ShaderNodeMixRGB")
     color=n.new("ShaderNodeRGB")
 
     # set location
     material.location = (0,-100)
-    color_ramp.location = (300,-200)
     output.location = (600,-200)
     mix.location = (400,100)
     color.location = (0,500)
-    color.outputs[0].default_value = (1, 1, 1, 1)
 
-    color_ramp.color_ramp.elements[1].color = (1, 1, 1, 1)
-    color_ramp.color_ramp.elements[0].color = (0,0,0, 1)
-    color_ramp.color_ramp.elements[0].position=0.2
-    color_ramp.color_ramp.elements[1].position=0.0
 
-    # TODO set color ramp by isWhite option
-    # connect links
     if not isWhite:
-        l.new(material.outputs["Alpha"], color_ramp.inputs["Fac"])
-        l.new(color_ramp.outputs["Color"],output.inputs[0])
+        color.outputs[0].default_value = (0, 0, 0, 1)
     else:
-        l.new(color.outputs["Color"], mix.inputs[0])
-        l.new(material.outputs["Alpha"], mix.inputs[1])
-        l.new(mix.outputs["Color"],output.inputs[0])
+        color.outputs[0].default_value = (1, 1, 1, 1)
+  
+    l.new(color.outputs["Color"], mix.inputs[0])
+    l.new(material.outputs["Alpha"], mix.inputs[1])
+    l.new(mix.outputs["Color"],output.inputs[0])
 
     return
 
+
+
+
+# make Images
+def makeComicMaterials(num):
+    mats = bpy.data.materials
+    t=""
+    for i,v in enumerate(mats):
+        if i == num:
+            materialNodes(v,isWhite=False)
+        else:
+            materialNodes(v)
+        t = t + str(i)
+    return t
+
+def saveImageFilesEachMaterials(destinationFolder,name):
+    s = bpy.context.scene
+
+    s.render.image_settings.file_format = 'PNG'
+
+    s.render.alpha_mode = 'TRANSPARENT'
+    s.render.image_settings.color_mode = 'RGBA'
+
+    import os
+    path = destinationFolder + "/"
+    mats = bpy.data.materials
+    for i,v in enumerate(mats):
+        t =makeComicMaterials(i)
+        #path = os.path.expanduser("~/Desktop/rendering/")
+        bpy.data.scenes['Scene'].render.filepath = path + v.name + "_image" + str(i) + t +".png"
+        bpy.ops.render.render( write_still=True ) 
+        allClearNodes()
 
 # clear Nodes and clear all Nodes
 def clearNodes(m):
@@ -226,67 +250,13 @@ def allClearNodes():
     return
 
 
-# make Images
-def makeComicMaterials(num):
-    mats = bpy.data.materials
-    for i,v in enumerate(mats):
-        if i is num:
-            materialNodes(v,isWhite=False)
-        else:
-            materialNodes(v)
-
-def saveImageFilesEachMaterials(destinationFolder,name):
-    s = bpy.context.scene
-
-    s.render.image_settings.file_format = 'PNG'
-
-    s.render.alpha_mode = 'TRANSPARENT'
-    s.render.image_settings.color_mode = 'RGBA'
-
-    import os
-    path = destinationFolder + "/"
-    mats = bpy.data.materials
-    for i,v in enumerate(mats):
-        makeComicMaterials(i)
-        #path = os.path.expanduser("~/Desktop/rendering/")
-        bpy.data.scenes['Scene'].render.filepath = path + v.name + "_image.png"
-        bpy.ops.render.render( write_still=True ) 
-        allClearNodes()
-
-# add primitive cube
-def addCube(name, x,y,z):
-    verts = [(1.0, 1.0, -1.0),  
-             (1.0, -1.0, -1.0),  
-            (-1.0, -1.0, -1.0),  
-            (-1.0, 1.0, -1.0),  
-             (1.0, 1.0, 1.0),  
-             (1.0, -1.0, 1.0),  
-            (-1.0, -1.0, 1.0),  
-            (-1.0, 1.0, 1.0)]  
-      
-    faces = [(0, 1, 2, 3),  
-             (4, 7, 6, 5),  
-             (0, 4, 5, 1),  
-             (1, 5, 6, 2),  
-             (2, 6, 7, 3),  
-             (4, 0, 3, 7)]  
-      
-    mesh_data = bpy.data.meshes.new(name)  
-    mesh_data.from_pydata(verts, [], faces)  
-    cube_object = bpy.data.objects.new(name, mesh_data)
-    cube_object.location = (x,y,z) 
-    scene = bpy.context.scene    
-    scene.objects.link(cube_object) 
-    return cube_object
-
-
 def createFolderIncremental(destinationFolder, name):
     import os
     destinationFolder = destinationFolder + name
 
     if not os.path.exists(destinationFolder):
         os.makedirs(destinationFolder)
-        return
+        return destinationFolder
 
     destinationFolder = destinationFolder + "%s"
     i=1
@@ -296,17 +266,6 @@ def createFolderIncremental(destinationFolder, name):
     os.makedirs(destinationFolder)
     return destinationFolder
 
-
-def addMaterial(o,m):
-    o.data.materials.append(m)
-    return o
-
-# use for add-on test
-def testMaterials():
-    addMaterial(addCube("A",0,0,0),bpy.data.materials.new("a"))
-    addMaterial(addCube("B",2,2,1),bpy.data.materials.new("b"))
-    addMaterial(addCube("C",-2,2,1),bpy.data.materials.new("c"))
-    allClearNodes()
 
 # main
 def makeComicResource():
