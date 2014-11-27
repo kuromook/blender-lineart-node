@@ -1,7 +1,13 @@
 # this script convert setting to monochrome lineart for comics
+#
+#Copyright (c) 2014 Toyofumi Fujiwara
+#Released under the MIT license
+#http://opensource.org/licenses/mit-license.php
+
 import bpy
+
+# lineart , no lineart gray , merged  images
 def comicLineartNode(destinationFolder,name):
-    # this script convert setting to monochrome lineart for comics
      
     s = bpy.context.scene
 
@@ -318,8 +324,38 @@ def makeComicResource():
 ################### add on setting section###########################
 bl_info = {
     "name": "Make Comic Resource",
-    "category": "Object",
+    "category": "Render",
+    "version"    : (0, 0, 1),
+    "blender"    : (2, 72, 0),
+    "location"   : "Node Editor >> Tools",
+    "description": "Make comic resources for clip studio paint."
 }
+
+class ComicResourcePanel(bpy.types.Panel):
+    bl_idname = "comic_resources_node_panel"
+    bl_label = "Comic Resources"
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = 'Generic'
+    bl_options = {'DEFAULT_CLOSED'}
+   
+    file_name= bpy.props.StringProperty(default="aa")
+
+    @classmethod
+    def poll(cls, context):
+        return bool(context.space_data.node_tree)
+        
+    def draw(self, context):
+        layout = self.layout
+        row = layout.column()
+        row.label(text="custom text")
+        row.prop(self, "text", text="name")
+        row.prop(self, "text", text="folder")
+
+        row.operator("comic.resource",
+                        text="Comic resources").use_clipboard = True
+
+ 
 
 class ComicResource(bpy.types.Operator):
     """Comic Resource"""
@@ -334,11 +370,12 @@ class ComicResource(bpy.types.Operator):
 
 def register():
     bpy.utils.register_class(ComicResource)
+    bpy.utils.register_class(ComicResourcePanel)
 
 
 def unregister():
     bpy.utils.unregister_class(ComicResource)
-
+    bpy.utils.unregister_class(ComicResourcePanel)
 
 if __name__ == "__main__":
     register()
