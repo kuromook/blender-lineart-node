@@ -1,7 +1,6 @@
 # this script convert setting to monochrome lineart for comics
 import bpy
-renderingImageFolderName = "test"
-def comicLineartNode():
+def comicLineartNode(destinationFolder,name):
     # this script convert setting to monochrome lineart for comics
      
     s = bpy.context.scene
@@ -69,7 +68,7 @@ def comicLineartNode():
 
     l.new(freestyleRender.outputs["Image"],composite.inputs["Image"])
 
-    saveLineImage()
+    saveLineImage(destinationFolder)
 
 
     render = n["Render Layers"]
@@ -133,21 +132,21 @@ def comicLineartNode():
     lineout = n.new("CompositorNodeOutputFile")
     lineout.name = "line out"
     lineout.location = (200, 600)
-    path = desitinationFolder
+    path = destinationFolder
     lineout.base_path = path
     lineout.file_slots.new("_lineout")
 
     grayout = n.new("CompositorNodeOutputFile")
     grayout.name = "gray out"
     grayout.location = (1200, 600)
-    path = desitinationFolder
+    path = destinationFolder
     grayout.base_path = path
     grayout.file_slots.new("_grayout")
 
     mergeout = n.new("CompositorNodeOutputFile")
     mergeout.name = "merge out"
     mergeout.location = (1200, -100)
-    path = desitinationFolder
+    path = destinationFolder
     mergeout.base_path = path
     mergeout.file_slots.new("_mergeout")
 
@@ -158,7 +157,7 @@ def comicLineartNode():
     return
 
 
-def saveLineImage():
+def saveLineImage(desitinationFolder):
     import os
     #path = os.path.expanduser("~/Desktop/rendering/")
     path = desitinationFolder + "/"
@@ -230,7 +229,7 @@ def makeComicMaterials(num):
         else:
             materialNodes(v)
 
-def saveImageFilesEachMaterials():
+def saveImageFilesEachMaterials(destinationFolder,name):
     s = bpy.context.scene
 
     s.render.image_settings.file_format = 'PNG'
@@ -239,8 +238,7 @@ def saveImageFilesEachMaterials():
     s.render.image_settings.color_mode = 'RGBA'
 
     import os
-    createFolderIncremental(renderingImageFolderName)
-    path = desitinationFolder + "/"
+    path = destinationFolder + "/"
     mats = bpy.data.materials
     for i,v in enumerate(mats):
         makeComicMaterials(i)
@@ -276,40 +274,72 @@ def addCube(name, x,y,z):
     return cube_object
 
 
-def createFolderIncremental(name):
+def createFolderIncremental(destinationFolder, name):
     import os
-    global desitinationFolder
-    desitinationFolder = os.path.expanduser("~/Desktop/rendering/") 
-    desitinationFolder = desitinationFolder + name
+    destinationFolder = destinationFolder + name
 
-    if not os.path.exists(desitinationFolder):
-        os.makedirs(desitinationFolder)
+    if not os.path.exists(destinationFolder):
+        os.makedirs(destinationFolder)
         return
 
-    desitinationFolder = desitinationFolder + "%s"
+    destinationFolder = destinationFolder + "%s"
     i=1
-    while os.path.exists(desitinationFolder % i):
+    while os.path.exists(destinationFolder % i):
         i+=1
-    desitinationFolder = desitinationFolder.replace("%s", str(i))
-    os.makedirs(desitinationFolder)
-    return
+    destinationFolder = destinationFolder.replace("%s", str(i))
+    os.makedirs(destinationFolder)
+    return destinationFolder
 
 
 def addMaterial(o,m):
     o.data.materials.append(m)
     return o
 
+# use for add-on test
+def testMaterials():
+    addMaterial(addCube("A",0,0,0),bpy.data.materials.new("a"))
+    addMaterial(addCube("B",2,2,1),bpy.data.materials.new("b"))
+    addMaterial(addCube("C",-2,2,1),bpy.data.materials.new("c"))
+    allClearNodes()
+
+# main
 def makeComicResource():
-    saveImageFilesEachMaterials()
-    comicLineartNode()
+    import os
+
+    # destination folder name for rendered image files
+    name = "test"
+    destinationFolder = os.path.expanduser("~/Desktop/rendering/") 
+    destinationFolder = createFolderIncremental(destinationFolder,name) + "/"
+
+    saveImageFilesEachMaterials(destinationFolder, name)
+    comicLineartNode(destinationFolder, name)
 
 
+################### add on setting section###########################
+bl_info = {
+    "name": "Make Comic Resource",
+    "category": "Object",
+}
 
-addMaterial(addCube("A",0,0,0),bpy.data.materials.new("a"))
-addMaterial(addCube("B",2,2,1),bpy.data.materials.new("b"))
-addMaterial(addCube("C",-2,2,1),bpy.data.materials.new("c"))
-allClearNodes()
+class ComicResource(bpy.types.Operator):
+    """Comic Resource"""
+    bl_idname = "comic.resource"
+    bl_label = "comic resource"
+    bl_options = {'REGISTER', 'UNDO'}
 
-#mats = bpy.data.materials
-#for m in mats:
-#    materialNodes(m,True)
+    def execute(self, context):    
+        makeComicResource()
+        return {'FINISHED'}
+
+
+def register():
+    bpy.utils.register_class(ComicResource)
+
+
+def unregister():
+    bpy.utils.unregister_class(ComicResource)
+
+
+if __name__ == "__main__":
+    register()
+
