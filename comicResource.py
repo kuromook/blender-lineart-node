@@ -249,6 +249,12 @@ def allClearNodes():
         clearNodes(mb)
     return
 
+def clearCompositorNodes():
+    s = bpy.context.scene
+    nodes = s.node_tre.nodes
+    for i in nodes:
+        i.remove(i)
+    s.use_nodes = False
 
 def createFolderIncremental(destinationFolder, name):
     import os
