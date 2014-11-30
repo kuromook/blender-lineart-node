@@ -125,7 +125,7 @@ class ComicLineart(bpy.types.Operator):
         clearObjects()
         addLineartMaterial()
         makeLineart()
-        objectJoin()
+        #objectJoin()
         outputFile()
         return {'FINISHED'}
 

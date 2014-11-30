@@ -188,7 +188,7 @@ class ComicLineartNode(bpy.types.Operator):
     def execute(self, context):  
         useBackDrop()  
         comicLineartNode()
-        objectJoin()
+        #objectJoin()
         return {'FINISHED'}
 
 
