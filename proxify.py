@@ -1,16 +1,44 @@
+#Copyright (c) 2014 Toyofumi Fujiwara
+#Released under the MIT license
+#http://opensource.org/licenses/mit-license.php
+
 import bpy
 
 def proxify():
-    ng = bpy.data.groups.new('')
-    objs = bpy.context.selected_objects
-    for ob in objs:
-        bpy.context.scene.objects.active = ob
-        print(ob)
-        #bpy.ops.object.proxy_make(object="", type='DEFAULT')
-        bpy.ops.object.proxy_make()
-        ob = bpy.context.object
-        ng.objects.link(ob)
+    import os
 
+    objs = bpy.context.selected_objects
+    proxyObjs = []
+
+    # group name as base name of source file 
+    o = objs[0]
+    group_name = os.path.basename(o.library.filepath)
+    g = bpy.data.groups.new(group_name)
+
+    # hash parent relation
+    suffix = "_proxy" # proxified object has string at suffix
+    hash = {o.name + suffix : o.parent.name + suffix for o in objs if o.parent}
+
+    # set proxy and group 
+    for o in objs:
+        bpy.context.scene.objects.active = o
+        bpy.ops.object.proxy_make()
+        o = bpy.context.object
+        g.objects.link(o)
+        proxyObjs.append(o)
+
+    # set parents by hash
+    proxyObjsHasName = [o for o in proxyObjs if o.name in hash]
+    for o in proxyObjsHasName:
+        print( o.name + " " + hash[o.name])
+        c = bpy.data.objects[o.name]
+        p = bpy.data.objects[hash[o.name]]
+
+        bpy.ops.object.select_all(action='DESELECT') 
+        c.select = True
+        p.select = True
+        bpy.context.scene.objects.active = p
+        bpy.ops.object.parent_set()
 
 ################### add on setting section###########################
 bl_info = {
