@@ -1,9 +1,18 @@
 import bpy
 
 def setNameText(objectName, meshName):
+    text_object_name = "proxy_object_name"
+    text_mesh_name = "proxy_mesh_name"
+
     t = bpy.data.texts
-    oText = t.new("proxy_object_name")
-    mText = t.new('proxy_mesh_name')
+    if text_object_name in [i.name for i in t]:
+        oText = t.new(text_object_name)
+    else:
+        oText = t[text_object_name]
+    if text_mesh_name in [i.name for i in t]:
+        mText = t.new(text_mesh_name)
+    else:
+        mText = t[text_mesh_name]
     oText.write(objectName)
     mText.write(meshName)
     return
@@ -16,3 +25,4 @@ def setNameObject():
     o = bpy.context.object
     o.name = oName
     o.data.name = mName
+    return
