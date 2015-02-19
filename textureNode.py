@@ -54,3 +54,35 @@ def textureNode():
     controlTex(False)
 
 
+
+################### add on setting section###########################
+bl_info = {
+    "name": "Comic Texture　Node",
+    "category": "Object",
+}
+
+import bpy
+
+
+class ComicTextureNode(bpy.types.Operator):
+    """Texture render exporter"""
+    bl_idname = "textureexport.comic"
+    bl_label = "comic texture"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context): 
+        bpy.context.scene.render.engine = 'BLENDER_RENDER'     
+        textureNode()
+        return {'FINISHED'}
+
+
+def register():
+    bpy.utils.register_class(ComicTextureNode)
+
+
+def unregister():
+    bpy.utils.unregister_class(ComicTextureNode)
+
+
+if __name__ == "__main__":
+    register()
