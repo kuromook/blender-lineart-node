@@ -132,20 +132,20 @@ def comicLineartNode():
     lineout = n.new("CompositorNodeOutputFile")
     lineout.name = "line out"
     lineout.location = (200, 600)
-    lineout.base_path = os.path.expanduser("~/Desktop/rendering/l")
-    lineout.file_slots.new("rendering")
+    lineout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    lineout.file_slots.new("rendering_lineart")
 
     grayout = n.new("CompositorNodeOutputFile")
     grayout.name = "gray out"
     grayout.location = (1200, 600)
-    grayout.base_path = os.path.expanduser("~/Desktop/rendering/g")
-    grayout.file_slots.new("rendering")
+    grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    grayout.file_slots.new("rendering_shadow")
 
     mergeout = n.new("CompositorNodeOutputFile")
     mergeout.name = "merge out"
     mergeout.location = (1200, -100)
-    mergeout.base_path = os.path.expanduser("~/Desktop/rendering/m")
-    mergeout.file_slots.new("rendering")
+    mergeout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    mergeout.file_slots.new("rendering_merged")
 
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
@@ -214,14 +214,21 @@ def baseLayerNode():
     baseout = n.new("CompositorNodeOutputFile")
     baseout.name = "base out"
     baseout.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
-    baseout.base_path = os.path.expanduser("~/Desktop/rendering/b")
-    baseout.file_slots.new("rendering")
+    baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    baseout.file_slots.new("rendering_base")
     l.new(pre_multi.outputs[0], baseout.inputs[-1])
 
     return
 
 
-
+def removeRenderingFolder():
+    import os
+    import shutil
+    path = os.path.expanduser("~/Desktop/rendering/1")
+    dst = os.path.expanduser("~/Desktop/rendering/bk")
+    shutil.rmtree(dst, ignore_errors=False)
+    os.rename(path, dst)
+    return
 
 # back drop on
 def useBackDrop():
@@ -262,7 +269,8 @@ class ComicLineartNode(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context): 
-        bpy.context.scene.render.engine = 'BLENDER_RENDER'     
+        bpy.context.scene.render.engine = 'BLENDER_RENDER'   
+        removeRenderingFolder()  
         useBackDrop()  
         baseLayerNode()
         comicLineartNode()
