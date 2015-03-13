@@ -10,6 +10,7 @@ def comicLineartNode():
     # make line art and shadow render
      
     s = bpy.context.scene
+    #s.world.light_settings.use_ambient_occlusion = True
 
     line_thickness = 1.1
     edge_threshold = 44
@@ -40,6 +41,7 @@ def comicLineartNode():
     r= s.render.layers.new( "RenderLayer")
 
     r.use_freestyle = False
+    r.use_pass_ambient_occlusion = True
 
     f.use_strand = False
     f.use_edge_enhance = False
@@ -82,12 +84,14 @@ def comicLineartNode():
     dilate = n.new("CompositorNodeDilateErode")
     viewer = n.new("CompositorNodeViewer")
 
+
     rgb2Bw.location = (200, 100)
     val2Rgb.location = (400, 100)
     alpha.location = (900,300)
     setAlpha.location = (700, 500)
     dilate.location = (400, 400)
     viewer.location = (1300, 350)
+
 
     rgb = n.new("CompositorNodeRGB")
     alphaMerge = n.new("CompositorNodeAlphaOver")
@@ -96,6 +100,13 @@ def comicLineartNode():
     rgb.location = (400, -200)
     alphaMerge.location = (900, -200)
     setAlphaMerge.location= (700, -200)
+
+    dilate_ao = n.new("CompositorNodeDilateErode")
+    setAlpha_ao = n.new("CompositorNodeSetAlpha")
+
+    dilate_ao.location = (100, -300)
+    setAlpha_ao.location = (200, -500)
+
 
     l.new(render.outputs[0], rgb2Bw.inputs[0])
     l.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
@@ -112,12 +123,20 @@ def comicLineartNode():
     l.new(dilate.outputs[0], setAlphaMerge.inputs[1])
     l.new(setAlphaMerge.outputs[0], alphaMerge.inputs[1])
     l.new(freestyleRender.outputs[0], alphaMerge.inputs[2])
+
+    l.new(render.outputs['AO'],setAlpha_ao.inputs[0])
+    l.new(render.outputs['AO'],dilate_ao.inputs[0])
+    l.new(render.outputs['Alpha'], dilate_ao.inputs[0])
+    l.new(dilate_ao.outputs[0], setAlpha_ao.inputs[1])
+
+
     # gray setting
     val2Rgb.color_ramp.interpolation = 'CONSTANT'
     #val2Rgb.color_ramp.color_mode="HSV"
     #val2Rgb.color_ramp.hue_interpolation = 'near'
 
     dilate.distance = -1
+    dilate_ao.distance = -1
 
     val2Rgb.color_ramp.elements[1].color = (1, 1, 1, 1)
     val2Rgb.color_ramp.elements[0].color = (0.279524, 0.279524, 0.279524, 1)
@@ -140,15 +159,15 @@ def comicLineartNode():
     grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     grayout.file_slots.new("rendering_shadow")
 
-    #mergeout = n.new("CompositorNodeOutputFile")
-    #mergeout.name = "merge out"
-    #mergeout.location = (1200, -100)
-    #mergeout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    #mergeout.file_slots.new("rendering_merged")
+    aoout = n.new("CompositorNodeOutputFile")
+    aoout.name = "ao out"
+    aoout.location = (400, -400)
+    aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    aoout.file_slots.new("rendering_ao")
 
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
-    #l.new(alphaMerge.outputs[0], mergeout.inputs[-1])
+    l.new(setAlpha_ao.outputs[0], aoout.inputs[-1])
 
 
 def baseLayerNode():
