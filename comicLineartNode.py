@@ -7,7 +7,7 @@
 import bpy
 
 def comicLineartNode():
-    # this script convert setting to monochrome lineart for comics
+    # make line art and shadow render
      
     s = bpy.context.scene
 
@@ -127,7 +127,6 @@ def comicLineartNode():
     rgb.outputs[0].default_value = (1,1,1,1)
 
     # output to image files
-    # l : line art only, g : gray only, m : line art and white alpha maerged
     import os
     lineout = n.new("CompositorNodeOutputFile")
     lineout.name = "line out"
@@ -141,18 +140,21 @@ def comicLineartNode():
     grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     grayout.file_slots.new("rendering_shadow")
 
-    mergeout = n.new("CompositorNodeOutputFile")
-    mergeout.name = "merge out"
-    mergeout.location = (1200, -100)
-    mergeout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    mergeout.file_slots.new("rendering_merged")
+    #mergeout = n.new("CompositorNodeOutputFile")
+    #mergeout.name = "merge out"
+    #mergeout.location = (1200, -100)
+    #mergeout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    #mergeout.file_slots.new("rendering_merged")
 
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
-    l.new(alphaMerge.outputs[0], mergeout.inputs[-1])
+    #l.new(alphaMerge.outputs[0], mergeout.inputs[-1])
 
 
 def baseLayerNode():
+    # make base render by using pass index
+    # pass index 1 to 10%, 2 to 20%, ...
+
     s = bpy.context.scene
     r= s.render.layers.new( "BaseLayer")
 
@@ -222,12 +224,14 @@ def baseLayerNode():
 
 
 def removeRenderingFolder():
+    # avoid to backup file incrementaly
     import os
     import shutil
     path = os.path.expanduser("~/Desktop/rendering/1")
     dst = os.path.expanduser("~/Desktop/rendering/bk")
-    shutil.rmtree(dst, ignore_errors=False)
-    os.rename(path, dst)
+    shutil.rmtree(dst, ignore_errors=True)
+    if os.path.exists(path):
+        os.rename(path, dst)
     return
 
 # back drop on
