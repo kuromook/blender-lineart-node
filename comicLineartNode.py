@@ -10,7 +10,6 @@ def comicLineartNode():
     # make line art and shadow render
      
     s = bpy.context.scene
-    #s.world.light_settings.use_ambient_occlusion = True
 
     line_thickness = 1.1
     edge_threshold = 44
@@ -56,6 +55,12 @@ def comicLineartNode():
     bpy.data.linestyles["LineStyle"].thickness_position = 'RELATIVE'
     bpy.data.linestyles["LineStyle"].thickness_ratio = 0
 
+    bpy.ops.scene.new(type="LINK_OBJECTS")
+    aos = bpy.context.scene
+    aos.name = "AO"
+    w = bpy.data.worlds.new("AO")
+    w.light_settings.use_ambient_occlusion = True
+    aos.world = bpy.data.worlds["AO"]
 
     # nodes
     s.use_nodes = True
@@ -101,11 +106,15 @@ def comicLineartNode():
     alphaMerge.location = (900, -200)
     setAlphaMerge.location= (700, -200)
 
+    render_ao = n.new(type="CompositorNodeRLayers")
     dilate_ao = n.new("CompositorNodeDilateErode")
     setAlpha_ao = n.new("CompositorNodeSetAlpha")
 
+    render_ao.location = (-200, -300)
     dilate_ao.location = (100, -300)
     setAlpha_ao.location = (200, -500)
+    render_ao.scene = bpy.data.scenes["AO"]
+    render_ao.layer = 'RenderLayer'
 
 
     l.new(render.outputs[0], rgb2Bw.inputs[0])
@@ -124,9 +133,9 @@ def comicLineartNode():
     l.new(setAlphaMerge.outputs[0], alphaMerge.inputs[1])
     l.new(freestyleRender.outputs[0], alphaMerge.inputs[2])
 
-    l.new(render.outputs['AO'],setAlpha_ao.inputs[0])
-    l.new(render.outputs['AO'],dilate_ao.inputs[0])
-    l.new(render.outputs['Alpha'], dilate_ao.inputs[0])
+    l.new(render_ao.outputs['AO'],setAlpha_ao.inputs[0])
+    l.new(render_ao.outputs['AO'],dilate_ao.inputs[0])
+    l.new(render_ao.outputs['Alpha'], dilate_ao.inputs[0])
     l.new(dilate_ao.outputs[0], setAlpha_ao.inputs[1])
 
 
@@ -168,6 +177,9 @@ def comicLineartNode():
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
     l.new(setAlpha_ao.outputs[0], aoout.inputs[-1])
+    
+    bpy.context.screen.scene = s
+    return
 
 
 def baseLayerNode():
@@ -250,7 +262,7 @@ def removeRenderingFolder():
     dst = os.path.expanduser("~/Desktop/rendering/bk")
     shutil.rmtree(dst, ignore_errors=True)
     if os.path.exists(path):
-        os.rename(path, dst)
+        os.replace(path, dst)
     return
 
 # back drop on
