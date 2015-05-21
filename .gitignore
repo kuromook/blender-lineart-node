@@ -1,5 +1,4 @@
-test.py
-test2.py
+test*.py
 lineart.sublime-project
 lineart.sublime-workspace
 console_run.script.py
