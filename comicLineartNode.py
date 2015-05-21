@@ -1,4 +1,4 @@
-# this script convert setting to monochrome lineart for comics
+# this script makes convert setting to monochrome lineart for comics
 
 #Copyright (c) 2014 Toyofumi Fujiwara
 #Released under the MIT license

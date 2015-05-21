@@ -1,3 +1,0 @@
-import bpy
-
-bpy.data.materials['aaa']
