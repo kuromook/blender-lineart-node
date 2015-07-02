@@ -31,6 +31,7 @@ def comicLineartNode():
     s.render.use_edge_enhance = True
     s.render.edge_threshold = edge_threshold
 
+
     #s.render.layers.active.freestyle_settings.crease_angle = 1.2
 
 
@@ -74,6 +75,9 @@ def comicLineartNode():
     composite.location = (1200, 100)
     render = n["Render Layers"]
     render.layer = 'RenderLayer'
+
+    s.render.layers["RenderLayer"].use_pass_object_index = True
+
     render.location = (0, 0)
 
     composite.use_alpha = True
@@ -116,6 +120,13 @@ def comicLineartNode():
     render_ao.scene = bpy.data.scenes["AO"]
     render_ao.layer = 'RenderLayer'
 
+    objectid_mask = n.new(type='CompositorNodeIDMask')
+    setAlpha_tex = n.new("CompositorNodeSetAlpha")
+    objectid_mask.index = 10000
+    objectid_mask.use_antialiasing = True
+
+    objectid_mask.location = (800, 0)
+    setAlpha_tex.location = (1000,0)
 
     l.new(render.outputs[0], rgb2Bw.inputs[0])
     l.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
@@ -124,6 +135,10 @@ def comicLineartNode():
     l.new(dilate.outputs[0], setAlpha.inputs[1])
     l.new(setAlpha.outputs[0],alpha.inputs[1])
     l.new(alpha.outputs[0], viewer.inputs[0])
+
+    l.new(render.outputs[0], setAlpha_tex.inputs[0])
+    l.new(render.outputs["IndexOB"], objectid_mask.inputs[0])
+    l.new(objectid_mask.outputs[0], setAlpha_tex.inputs[1])
 
     l.new(freestyleRender.outputs[0], alpha.inputs[2])
     l.new(alpha.outputs[0], composite.inputs[0])
@@ -174,16 +189,23 @@ def comicLineartNode():
     aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     aoout.file_slots.new("rendering_ao")
 
+    texout = n.new("CompositorNodeOutputFile")
+    texout.name = "tex out"
+    texout.location = (1200, 0)
+    texout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    texout.file_slots.new("rendering_tex")
+
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
     l.new(setAlpha_ao.outputs[0], aoout.inputs[-1])
+    l.new(setAlpha_tex.outputs[0], texout.inputs[-1])
     
     bpy.context.screen.scene = s
     return
 
 
 def baseLayerNode():
-    # make base render by using pass index
+    "make base render by using pass index"
     # pass index 1 to 10%, 2 to 20%, ...
 
     s = bpy.context.scene
@@ -286,6 +308,31 @@ def objectJoin():
     bpy.ops.object.join()
 
 
+def object10000():
+    if len(bpy.data.textures) == 0:
+        return
+    def checkMat(item):
+        m = bpy.data.materials
+        name = item[0]
+        for t in m[name].texture_slots:
+            if t is not None:
+                return True
+        return False
+     
+    def checkOb(o):
+        slots = o.material_slots
+        if len(slots) == 0:
+            return False
+        else:
+            items = slots.items()
+            for i in items:
+                if checkMat(i) is True:
+                    return True
+            return False
+
+    for o in bpy.data.objects:
+        if checkOb(o):
+            o.pass_index = 10000
 
 
 ################### add on setting section###########################

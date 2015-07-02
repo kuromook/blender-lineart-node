@@ -1,0 +1,834 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"getLi",
+				"getListObjectDbOrTw"
+			],
+			[
+				"csv",
+				"csvPrint"
+			],
+			[
+				"tex",
+				"textCheck"
+			],
+			[
+				"mem",
+				"members"
+			],
+			[
+				"de",
+				"description"
+			],
+			[
+				"sc",
+				"screen_name"
+			],
+			[
+				"screen",
+				"screen_name"
+			],
+			[
+				"follo",
+				"followers"
+			],
+			[
+				"fo",
+				"followersObj"
+			],
+			[
+				"getF",
+				"getFollowersWithCheck"
+			],
+			[
+				"setL",
+				"setListMembers"
+			],
+			[
+				"TABLE",
+				"TABLE_NAME"
+			],
+			[
+				"DB",
+				"DB_FILE_NAME"
+			],
+			[
+				"num",
+				"numbering_lists"
+			],
+			[
+				"no_",
+				"non_exist_members"
+			],
+			[
+				"que",
+				"query_yes_no"
+			],
+			[
+				"sea",
+				"search_str"
+			],
+			[
+				"se",
+				"search_str"
+			],
+			[
+				"read",
+				"readDbAndWriteCsv"
+			],
+			[
+				"fet",
+				"fetch_db"
+			],
+			[
+				"rea",
+				"readDbAll"
+			],
+			[
+				"fetch",
+				"fetch_date"
+			],
+			[
+				"dai",
+				"dailySales"
+			],
+			[
+				"yes",
+				"yesterday"
+			],
+			[
+				"show",
+				"showAll"
+			],
+			[
+				"time",
+				"timedelta"
+			],
+			[
+				"json",
+				"json_str"
+			],
+			[
+				"toda",
+				"todayData"
+			],
+			[
+				"D",
+				"DB_FILE_NAME"
+			],
+			[
+				"fa",
+				"favorite_count"
+			],
+			[
+				"fri",
+				"friendsNotMutual"
+			],
+			[
+				"fi",
+				"friendsNotMutual"
+			],
+			[
+				"tag",
+				"tag_list"
+			],
+			[
+				"un",
+				"unfollowedByFollowers"
+			],
+			[
+				"unfo",
+				"unfollowedByMe"
+			],
+			[
+				"unFo",
+				"unfollowedByFollowers"
+			],
+			[
+				"crea",
+				"createFriendship"
+			],
+			[
+				"consi",
+				"consignment_name"
+			],
+			[
+				"o",
+				"owner_screen_name"
+			],
+			[
+				"followers",
+				"followers_count"
+			],
+			[
+				"text",
+				"text_img"
+			],
+			[
+				"exist",
+				"exist_listMembers"
+			],
+			[
+				"exist_",
+				"exist_list_by_name"
+			],
+			[
+				"ex",
+				"exist_members"
+			],
+			[
+				"rest",
+				"rest_status"
+			],
+			[
+				"check",
+				"check_rest_status"
+			],
+			[
+				"cellFO",
+				"cellOfValue"
+			],
+			[
+				"cellO",
+				"cellOfProperty"
+			],
+			[
+				"g",
+				"g_screen_names"
+			],
+			[
+				"ACC",
+				"ACCESS_TOKEN"
+			],
+			[
+				"API_",
+				"API_SECRET"
+			],
+			[
+				"ACCE",
+				"ACCESS_TOKEN_SECRET"
+			],
+			[
+				"API",
+				"API_KEY"
+			],
+			[
+				"alpha",
+				"alphaMerge"
+			],
+			[
+				"setAlpha",
+				"setAlphaMerge"
+			],
+			[
+				"setAl",
+				"setAlphaMerge"
+			],
+			[
+				"Com",
+				"CompositorNodeSetAlpha"
+			],
+			[
+				"Compo",
+				"CompositorNodeAlphaOver"
+			],
+			[
+				"use",
+				"use_nodes"
+			],
+			[
+				"conver",
+				"convertCspText"
+			],
+			[
+				"convertC",
+				"convertCspTextByMecab"
+			],
+			[
+				"con",
+				"convertCspText"
+			],
+			[
+				"clipboar",
+				"clipboard_append"
+			],
+			[
+				"statu",
+				"statuses"
+			],
+			[
+				"twi",
+				"twitter_api"
+			],
+			[
+				"twitter",
+				"Twitter"
+			],
+			[
+				"us",
+				"us_trends"
+			],
+			[
+				"world",
+				"world_trends_set"
+			],
+			[
+				"W",
+				"WORLD_WOE_ID"
+			],
+			[
+				"CON",
+				"CONSUMER_SECRET"
+			],
+			[
+				"OAU",
+				"OAUTH_TOKEN_SECRET"
+			],
+			[
+				"top",
+				"topLayer"
+			],
+			[
+				"pilla",
+				"pillarAppend"
+			],
+			[
+				"wall",
+				"wall_density"
+			],
+			[
+				"rotation",
+				"rotation"
+			],
+			[
+				"wing",
+				"wingdbstub"
+			],
+			[
+				"qc_omi",
+				"qc_omit_section"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/fujiwaratoyofumi/code/py/my-python-modules/my_tw_modules.py",
+			"settings":
+			{
+				"buffer_size": 7526,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "pack",
+		"selected_items":
+		[
+			[
+				"pack",
+				"Package Control: Disable Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"packageControl",
+				"Package Control: List Packages"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"pa",
+				"Package Control: Add Repository"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"pacag",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 539.0
+	},
+	"console":
+	{
+		"height": 358.0,
+		"history":
+		[
+			"pep8_autoformat",
+			"sublime.log_commands(False)",
+			"sublime.log_commands(True)",
+			"sublime.log_command(True)",
+			"import SublimeBlenderExecuteCommand",
+			"sublime_blender_execute",
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp = sublime.installed_packages_path(); os.makedirs( ipp ) if not os.path.exists(ipp) else None; urllib2.install_opener( urllib2.build_opener( urllib2.ProxyHandler( ))); open( os.path.join( ipp, pf), 'wb' ).write( urllib2.urlopen( 'http://sublime.wbond.net/' +pf.replace( ' ','%20' )).read()); print( 'Please restart Sublime Text to finish installation')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules"
+	],
+	"file_history":
+	[
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/.gitignore",
+		"/Users/fujiwaratoyofumi/code/py/lineart/.gitignore",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/mutuals.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/update_mutual_list.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/my_db_modules.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/update_friends_gs.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/create_list.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/fetch_friends_fromGs.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/fetch_favorites.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/fetch_favorites_json.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/my_tw_modules.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/makeRequestlist.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/my_gs_modules.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/fav.sh",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/request.sh",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/cgi-bin/strategic_view.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/my_common_modules.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/my_tw_modules.pyc",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/cgi-bin/cgitest_json.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/.Rhistory",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/twitter2gs.sh",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/gs2twitter.sh",
+		"/Users/fujiwaratoyofumi/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/fujiwaratoyofumi/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/update_mutual_list.sh",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/check_rest_limit.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/_favandrt.csv",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/star.sh",
+		"/Users/fujiwaratoyofumi/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/fujiwaratoyofumi/.emacs.d/site-lisp/evernote-mode.patch",
+		"/Users/fujiwaratoyofumi/.emacs.d/site-lisp/evernote-mode.el.rej",
+		"/Users/fujiwaratoyofumi/.emacs.d/init.el",
+		"/Users/fujiwaratoyofumi/.emacs.d/conf/util.el",
+		"/Users/fujiwaratoyofumi/.rbenv/shims/enclient.rb",
+		"/Users/fujiwaratoyofumi/.emacs.d/site-lisp/evernote-mode.el",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/ctrlDb.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/_friends-worksheet_temp.csv",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/star.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/fetchFriends_fromTwitter.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/mergeLists.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/rmBlankList.py",
+		"/Users/fujiwaratoyofumi/code/py/scraping/tora_daily.csv",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/webserver.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/index.cgi",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/index.html",
+		"/Users/fujiwaratoyofumi/code/py/fav_view/index.html",
+		"/Users/fujiwaratoyofumi/code/php/twtr/php/manage_favorites.php",
+		"/Users/fujiwaratoyofumi/code/py/fav_view/server.py",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/fav.php",
+		"/Users/fujiwaratoyofumi/code/R/RSample/Chapter2/sample_data.csv",
+		"/Users/fujiwaratoyofumi/code/R/RSample/Chapter2/_friends-worksheet_temp.csv",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/twl.php",
+		"/Users/fujiwaratoyofumi/Dropbox/save-ps-to-svg1.0.jsx",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/followers_friends.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/_friends-worksheet.csv",
+		"/Users/fujiwaratoyofumi/code/py/lineart/textureNode.py",
+		"/Users/fujiwaratoyofumi/code/py/blog/publish.json",
+		"/Users/fujiwaratoyofumi/code/py/orgOrganize/orgNode.py",
+		"/Users/fujiwaratoyofumi/code/py/blender_3point_lighting/add_3point_lighting.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/basemask.py",
+		"/Users/fujiwaratoyofumi/code/py/blender_3point_lighting/create_toon_material.py",
+		"/Users/fujiwaratoyofumi/code/py/blog/jsonRead.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/struct.bk",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/struct.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/create_list_field.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/makelist.py",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/ti.php",
+		"/Users/fujiwaratoyofumi/code/py/blog/fetch_management_fromGs.py",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/t1.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/t2.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/t3.php",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/getFriendsFromTwitter.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/inlist.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/_followes-worksheet.csv",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/gsheet_secret.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/followes.py",
+		"/Users/fujiwaratoyofumi/code/py/my-python-modules/secret.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/memberships.py",
+		"/Users/fujiwaratoyofumi/code/py/layerRenamer/layerRenamer.py",
+		"/Users/fujiwaratoyofumi/code/py/layerRenamer/gsheet_getRenamer.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/list.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/followesNotSetLists.py",
+		"/Users/fujiwaratoyofumi/code/py/twitter_lists/secret.py",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/tmhOAuth.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/OAuth.php",
+		"/Users/fujiwaratoyofumi/code/py/layerRenamer/rename.csv",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_LayerRenamer_Position.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/layername.ahk",
+		"/Users/fujiwaratoyofumi/code/py/layerRenamer/gui.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/layerRename2.ahk",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/hometimeline.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/twitter-home-time-line.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/twoh10_scr.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/manage_list.php",
+		"/Users/fujiwaratoyofumi/code/py/testurl/secret.py",
+		"/Users/fujiwaratoyofumi/code/py/testurl/testlist.py",
+		"/Users/fujiwaratoyofumi/code/py/testurl/testlisttl.py",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/isLife.php",
+		"/Users/fujiwaratoyofumi/code/php/strategicview/test.php",
+		"/Users/fujiwaratoyofumi/code/php/test.php",
+		"/Users/fujiwaratoyofumi/code/py/lineart/proxify.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/comicResource.py",
+		"/Users/fujiwaratoyofumi/code/py/blog/blogCode.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/makeLineartNode.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/console_run_script.py",
+		"/Users/fujiwaratoyofumi/Dropbox/proxify.py",
+		"/Users/fujiwaratoyofumi/Desktop/io_import_images_as_planes.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/comicLineartNode.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/material.py",
+		"/Users/fujiwaratoyofumi/code/py/lineart/makeLineart.py",
+		"/Users/fujiwaratoyofumi/Library/Application Support/Sublime Text 3/Packages/Blender Development/SublimeBlender.sublime-settings",
+		"/Users/fujiwaratoyofumi/Library/Application Support/Sublime Text 3/Packages/User/SublimeBlender.sublime-settings",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON24/after/Classes/GameLayer.cpp",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON18/after/Classes/BallSprite.cpp",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON19/after/Classes/GameLayer.cpp",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON19/after/Classes/BallSprite.cpp",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON19/after/Classes/AppDelegate.cpp",
+		"/Users/fujiwaratoyofumi/cocos/COCOS2DXSAMPLE1006/LESSON21/after/Classes/GameLayer.cpp",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyLine.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/flow.json",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_func.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_flow.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyBackground.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyCharacter.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyDustpan.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyOnomatopeia.ahk",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyOnomatopeia.bak",
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint.ahk"
+	],
+	"find":
+	{
+		"height": 31.0
+	},
+	"find_in_files":
+	{
+		"height": 105.0,
+		"where_history":
+		[
+			"/Users/fujiwaratoyofumi/code/py/twitter_lists",
+			"/Users/fujiwaratoyofumi/code/py",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"words",
+			"ary",
+			"my_db_modules",
+			"print",
+			"csvP",
+			"20",
+			"10",
+			"ary",
+			"DB_FILE_NAME",
+			"query_yes_no",
+			"getList",
+			"OWNER",
+			"Config",
+			"non_",
+			"readGsAndSetDB",
+			"twitter",
+			"screen_name",
+			"2783822288",
+			"9181723",
+			"09181723",
+			"mergeAry",
+			"mng29 ",
+			"intSlug2Str",
+			"09181723",
+			"monokurocat1211",
+			"sleep",
+			"readAndSetDB",
+			"sym",
+			"\n                    ",
+			"getLists",
+			"getListMembers",
+			"getFollowersWithCheck",
+			"print",
+			"\"k\"",
+			"sales",
+			"strp",
+			"stock0",
+			"toda",
+			"datetime",
+			"cur.execute",
+			"create_at",
+			"date",
+			"'social_data2.db'",
+			"ary",
+			"setLi",
+			"tag",
+			"zip",
+			"except twitter.api.TwitterHTTPError as e:\n                hanle_tw_error(e,[screen_name])\n                print( \"faild : \" + tid + \" \" + text)",
+			"isinstance",
+			"0918",
+			"\n            ",
+			"ignore",
+			"alpha",
+			"lineout",
+			"Struct",
+			"tweet_count",
+			"authencication",
+			"followers",
+			"tweet",
+			"tweet_count",
+			"getListMembers",
+			"ListMembers ",
+			"setListMembers ",
+			"rangeToJson",
+			"developer",
+			"cg",
+			"$val",
+			"followers",
+			"name_list",
+			"listList",
+			"body",
+			"ary_uniq",
+			"funcGUI",
+			"string",
+			"str",
+			"rename",
+			"\"\\n\"",
+			"access",
+			"write",
+			"count",
+			"gName",
+			"array",
+			"SoftenArrayModMergeLimit",
+			"softenArrayModMergeLimit",
+			"SetArrayModMergeLimit",
+			"ComicLineartNode",
+			"~/Desktop/",
+			"lineout",
+			"Alpha",
+			"alpha",
+			"bpy.context.scene.render",
+			"bpy.context.scene",
+			"n[\"ColorRamp\"]",
+			"bpy.data.node_groups[\"Compositing Nodetree\"].nodes",
+			"r.",
+			"r.layers[\"Render Layer\"]",
+			"bpy.context.scene.render",
+			"c.render",
+			"bpy.context.scene",
+			"layer_add",
+			"scraper",
+			"Scraper",
+			"remove",
+			"default",
+			"0",
+			"default",
+			"Base",
+			"speakingSeparator",
+			"博報堂",
+			"False",
+			"splitLine",
+			"...",
+			">>>",
+			"carregeReturn",
+			"decode",
+			"plt",
+			"spreadToSingles",
+			"MYUTL",
+			"flag",
+			"paintLayerObj",
+			"cube",
+			"islampilar",
+			"False",
+			"appendFileName",
+			"0.5",
+			"backWall",
+			"wall_",
+			"ceiling"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/fujiwaratoyofumi/code/py/my-python-modules/my_tw_modules.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7526,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								147,
+								147
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 284.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 33.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 33.0
+	},
+	"pinned_build_system": "",
+	"project": "my-python-modules.sublime-project",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				".Rhistory"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Desktop/py/lib/blender.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 187.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Bet",
+				"between"
+			]
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 265.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
