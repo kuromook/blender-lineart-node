@@ -309,35 +309,17 @@ def objectJoin():
 
 
 def object10000():
-    if len(bpy.data.textures) == 0:
-        return
-    def checkMat(item):
-        m = bpy.data.materials
-        name = item[0]
-        for t in m[name].texture_slots:
-            if t is not None:
-                return True
-        return False
-     
-    def checkOb(o):
-        slots = o.material_slots
-        if len(slots) == 0:
-            return False
-        else:
-            items = slots.items()
-            for i in items:
-                if checkMat(i) is True:
-                    return True
-            return False
-
+    # set pass index to 10000 if object has texture image
+    materials = bpy.data.materials
+    hasTexture = {k: any(v.texture_slots) for k, v in materials.items()}
     for o in bpy.data.objects:
-        if checkOb(o):
+        if any([hasTexture[name for name in o.material_slots.keys()]):  # i[0] : material name
             o.pass_index = 10000
 
 
 ################### add on setting section###########################
 bl_info = {
-    "name": "Conver Comic Lineart　Node",
+    "name": "Convert Comic Lineart　Node",
     "category": "Object",
 }
 
@@ -351,7 +333,7 @@ class ComicLineartNode(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context): 
-        bpy.context.scene.render.engine = 'BLENDER_RENDER'   
+        #bpy.context.scene.render.engine = 'BLENDER_RENDER'   
         removeRenderingFolder()  
         useBackDrop()  
         baseLayerNode()
