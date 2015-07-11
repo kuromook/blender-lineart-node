@@ -333,7 +333,7 @@ class ComicLineartNode(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context): 
-        #bpy.context.scene.render.engine = 'BLENDER_RENDER'   
+        bpy.context.scene.render.engine = 'BLENDER_RENDER'   
         removeRenderingFolder()  
         useBackDrop()  
         baseLayerNode()
