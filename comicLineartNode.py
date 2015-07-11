@@ -308,13 +308,7 @@ def objectJoin():
     bpy.ops.object.join()
 
 
-def object10000():
-    # set pass index to 10000 if object has texture image
-    materials = bpy.data.materials
-    hasTexture = {k: any(v.texture_slots) for k, v in materials.items()}
-    for o in bpy.data.objects:
-        if any([hasTexture[name for name in o.material_slots.keys()]):  # i[0] : material name
-            o.pass_index = 10000
+
 
 
 ################### add on setting section###########################
