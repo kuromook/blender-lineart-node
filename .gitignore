@@ -1,4 +1,4 @@
 test*.py
-lineart.sublime-project
-lineart.sublime-workspace
+*.sublime-project
+*.sublime-workspace
 console_run.script.py
