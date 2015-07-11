@@ -3,7 +3,8 @@ this repository is scripts for blender.
 
 blender の、主に漫画制作用途に作ったスクリプトです
 
-# comicLineartNode addon
+# comicLineartNode.py
+addon になっています
 実行すると レンダリング設定用のノードを生成します
 出力先はデスクトップの rendering/1 フォルダに設定されます
 
@@ -28,3 +29,15 @@ material pass index は properties -> material -> options -> pass index で設�
 
 object pass index は properties -> object -> rerations -> pass index で設定します
 object pass index に10000 を割り振ってあるオブジェクトのみ、rendering_tex001.png に出力されます
+
+# proxify.py
+link して取り込んだデータを proxy に変換し、group にまとめます
+
+TODO 
+- [ ] 取り込む際の file 名を group 名に自動で割り振る
+
+# softenMirrorMergeLimit.py / softenArrayMergeLimit.py
+ミラー/アレイ モディファイアのマージリミットを一括して設定します。
+
+# その他のファイル
+だいたいゴミなのでそのうち整理します(^^;;
