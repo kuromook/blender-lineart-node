@@ -1,7 +1,7 @@
 # blender-lineart-node
 this repository is scripts for blender.
 
-blender の、主に漫画制作用途に作ったスクリプトです
+blender の、主に漫画背景制作用途に作ったスクリプトです
 
 # comicLineartNode.py
 addon になっています
