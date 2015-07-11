@@ -8,13 +8,13 @@ addon になっています
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
 
-|file name| 用途|
+|file name| 出力される画像|
 |:-----|:----------|
-| base | Material Pass Index に準じた基本配色|
-| AO | Ambient Occrusion のみ|
-|lineart| 線画のみ|
-|shadow| 陰影のみ|
-|tex| texture image を割り振ったオブジェクトのみ|
+| rendering_base001 | Material Pass Index に準じた基本配色|
+| rendering_AO001 | Ambient Occrusion のみ|
+|rendering_lineart001| 線画のみ|
+|rendering_shadow001| 陰影のみ|
+|rendering_tex001| texture image を割り振ったオブジェクトのみ|
 
 ## 作成の経緯
 単純に一枚の画像にレンダリング出力されると、clip studio paint で作業する際に不便を感じることが多かったため、後処理の利便の向上のために作成しました  
