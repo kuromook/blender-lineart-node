@@ -7,6 +7,7 @@ blender の、主に漫画背景制作用途に作ったスクリプトです
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
+レンダラーを Blender Render に自動設定されます  
 
 |file name| 出力される画像|
 |:-----|:----------|
@@ -32,10 +33,15 @@ ex.
 node editor の colorRamp node で調整します  
 ![corlor ramp](./readme_img/Image 132.jpg)
 ![corlor ramp](./readme_img/Image 133.jpg)  
+backdrop を on にしておくと楽です  
+
+現状、ランプは点光源一つを前提としています  
+複雑な光源の配置や、cycles render でも利用は可能です
+
 
 ### pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
-マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% のみになっています）  
+マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% に対応付けしてあります）  
 ![material pass index](./readme_img/Image 130.jpg)
 
 object pass index は properties -> object -> rerations -> pass index で設定します  
