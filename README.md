@@ -16,6 +16,8 @@ addon になっています
 |rendering_shadow001| 陰影のみ|
 |rendering_tex001| texture image を割り振ったオブジェクトのみ|
 
+![lineart](https://raw.github.com/wiki/kuromook/blender-lineart-node/readme-img/rendering_lineart0001.png)
+
 ### 作成の経緯
 単純に一枚の画像にレンダリング出力されると、clip studio paint で作業する際に不便を感じることが多かったため、後処理の利便の向上のために作成しました  
 ex.
