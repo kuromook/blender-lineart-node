@@ -6,8 +6,9 @@
 
 import bpy
 
+
 def comicLineartNode():
-    # make line art and shadow render
+    '''make line art and shadow render'''
      
     s = bpy.context.scene
 
@@ -65,7 +66,6 @@ def comicLineartNode():
 
     # nodes
     s.use_nodes = True
-        
 
     n = s.node_tree.nodes
     l = s.node_tree.links
@@ -96,7 +96,7 @@ def comicLineartNode():
 
     rgb2Bw.location = (200, 100)
     val2Rgb.location = (400, 100)
-    alpha.location = (900,300)
+    alpha.location = (900, 300)
     setAlpha.location = (700, 500)
     dilate.location = (400, 400)
     viewer.location = (1300, 350)
@@ -120,25 +120,48 @@ def comicLineartNode():
     render_ao.scene = bpy.data.scenes["AO"]
     render_ao.layer = 'RenderLayer'
 
-    objectid_mask = n.new(type='CompositorNodeIDMask')
-    setAlpha_tex = n.new("CompositorNodeSetAlpha")
-    objectid_mask.index = 10000
-    objectid_mask.use_antialiasing = True
+    def getObjectPassIndex():
+        o = bpy.data.objects
+        index = [i.pass_index for i in o]
+        unique = lambda x: list(set(x))
+        index = unique(index)
+        index.remove(0)     # ignore 0 as default value
+        return index
 
-    objectid_mask.location = (800, 0)
-    setAlpha_tex.location = (1000,0)
+    def makeNodeObIDMask(passIndex, count):
+        import os
+        objectid_mask = n.new(type='CompositorNodeIDMask')
+        setMix_obj = n.new("CompositorNodeMixRGB")
+        objectid_mask.index = passIndex
+        objectid_mask.use_antialiasing = True
+
+        objectid_mask.location = (800, -1000 + count*(-200))
+        setMix_obj.location = (1000, -1000 + count*(-200))
+        setMix_obj.inputs[2].default_value = (0.8, 0.8, 0.8, 1)
+        l.new(render.outputs["IndexOB"], objectid_mask.inputs[0])
+        l.new(objectid_mask.outputs[0], setMix_obj.inputs[0])
+
+        objectMaskOut = n.new("CompositorNodeOutputFile")
+        objectMaskOut.name = "ob mask out"
+        objectMaskOut.location = (1200, -1000 + count*(-200))
+        objectMaskOut.base_path = os.path.expanduser("~/Desktop/rendering/1")
+        objectMaskOut.file_slots.new("rendering_OBmask" + str(passIndex) + "_")
+
+        l.new(setMix_obj.outputs[0], objectMaskOut.inputs[-1])
+        return
+
+    objectPassIndexList = getObjectPassIndex()
+    for i, v in enumerate(objectPassIndexList):
+        makeNodeObIDMask(v, i)
 
     l.new(render.outputs[0], rgb2Bw.inputs[0])
     l.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
     l.new(val2Rgb.outputs[0], setAlpha.inputs[0])
     l.new(render.outputs['Alpha'], dilate.inputs[0])
     l.new(dilate.outputs[0], setAlpha.inputs[1])
-    l.new(setAlpha.outputs[0],alpha.inputs[1])
+    l.new(setAlpha.outputs[0], alpha.inputs[1])
     l.new(alpha.outputs[0], viewer.inputs[0])
 
-    l.new(render.outputs[0], setAlpha_tex.inputs[0])
-    l.new(render.outputs["IndexOB"], objectid_mask.inputs[0])
-    l.new(objectid_mask.outputs[0], setAlpha_tex.inputs[1])
 
     l.new(freestyleRender.outputs[0], alpha.inputs[2])
     l.new(alpha.outputs[0], composite.inputs[0])
@@ -189,17 +212,11 @@ def comicLineartNode():
     aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     aoout.file_slots.new("rendering_ao")
 
-    texout = n.new("CompositorNodeOutputFile")
-    texout.name = "tex out"
-    texout.location = (1200, 0)
-    texout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    texout.file_slots.new("rendering_tex")
 
     l.new(freestyleRender.outputs[0], lineout.inputs[-1])
     l.new(setAlpha.outputs[0], grayout.inputs[-1])
     l.new(setAlpha_ao.outputs[0], aoout.inputs[-1])
-    l.new(setAlpha_tex.outputs[0], texout.inputs[-1])
-    
+
     bpy.context.screen.scene = s
     return
 
@@ -207,9 +224,10 @@ def comicLineartNode():
 def baseLayerNode():
     "make base render by using pass index"
     # pass index 1 to 10%, 2 to 20%, ...
+    idMaskList = {1: 1, 2: 2, 3: 3, 4: 4}
 
     s = bpy.context.scene
-    r= s.render.layers.new( "BaseLayer")
+    r = s.render.layers.new("BaseLayer")
 
     BS_LOCATION_X = 0
     BS_LOCATION_Y = 3000
@@ -229,50 +247,48 @@ def baseLayerNode():
     c.name = "BaseLayer"
     c.layer = 'BaseLayer'
 
-    idMaskList = [1,2,3,4]
-
-    for i in idMaskList:
+    def createBase(i, v):
         id_mask = n.new(type='CompositorNodeIDMask')
         id_mask.index = i
         id_mask.location = (300, BS_LOCATION_Y + i*200)
 
-        l.new(c.outputs["IndexMA"], id_mask.inputs[0])
         mix = n.new(type='CompositorNodeMixRGB')
         mix.location = (600, BS_LOCATION_Y + i*200)
-        val = 1.0-i*0.1
+        val = 1.0-v*0.1
         mix.inputs[2].default_value = (val, val, val, 1)
+        mix.name = str(i)
 
+        l.new(c.outputs["IndexMA"], id_mask.inputs[0])
         l.new(id_mask.outputs[0], mix.inputs[0])
+        return mix
 
-        if i == 2:
-            multi = n.new(type='CompositorNodeMixRGB')
-            multi.blend_type = 'MULTIPLY'
-            multi.location = (300 + i*300, BS_LOCATION_Y + i*200)
-            l.new(mix.outputs[0], multi.inputs[1])
-            l.new(pre_mix.outputs[0], multi.inputs[2])
-            pre_multi = multi
+    def multiNode(i, pre_mix, mix):
+        multi = n.new(type='CompositorNodeMixRGB')
+        multi.blend_type = 'MULTIPLY'
+        multi.location = (300 + i*300, BS_LOCATION_Y + i*200)
 
-        if i > 2:
-            multi = n.new(type='CompositorNodeMixRGB')
-            multi.blend_type = 'MULTIPLY'
-            multi.location = (300 + i*300, BS_LOCATION_Y + i*200)
-            l.new(mix.outputs[0], multi.inputs[1])
-            l.new(pre_multi.outputs[0], multi.inputs[2])
-            pre_multi = multi
+        l.new(mix.outputs[0], multi.inputs[1])
+        l.new(pre_mix.outputs[0], multi.inputs[2])
+        return multi
 
-        pre_mix = mix
+    def createOutput(pre):
+        import os
+        baseout = n.new("CompositorNodeOutputFile")
+        baseout.name = "base out"
+        baseout.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
+        baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+        baseout.file_slots.new("rendering_base")
 
-    out.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList)* 200)
-    l.new(pre_multi.outputs[0],out.inputs[0])
+        l.new(pre.outputs[0], baseout.inputs[-1])
+        return
 
-    import os
-    baseout = n.new("CompositorNodeOutputFile")
-    baseout.name = "base out"
-    baseout.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
-    baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    baseout.file_slots.new("rendering_base")
-    l.new(pre_multi.outputs[0], baseout.inputs[-1])
-
+    for i, v in idMaskList.items():
+        mix = createBase(i, v)
+        if i > 1:
+            pre_mix = multiNode(i, pre_mix, mix)
+        else:
+            pre_mix = mix
+    createOutput(pre_mix)
     return
 
 
@@ -306,9 +322,6 @@ def objectJoin():
         else:
             ob.select = False
     bpy.ops.object.join()
-
-
-
 
 
 ################### add on setting section###########################
