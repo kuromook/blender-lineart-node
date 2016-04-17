@@ -1,6 +1,6 @@
 # this script makes convert setting to monochrome lineart for comics
 
-#Copyright (c) 2014 Toyofumi Fujiwara
+#Copyright (c) 2014 Shunnich Fujiwara
 #Released under the MIT license
 #http://opensource.org/licenses/mit-license.php
 
@@ -9,7 +9,6 @@ import bpy
 
 def comicLineartNode():
     '''make line art and shadow render'''
-     
     s = bpy.context.scene
 
     line_thickness = 1.1
@@ -166,7 +165,7 @@ def comicLineartNode():
     l.new(freestyleRender.outputs[0], alpha.inputs[2])
     l.new(alpha.outputs[0], composite.inputs[0])
 
-    l.new(rgb.outputs[0],setAlphaMerge.inputs[0])
+    l.new(rgb.outputs[0], setAlphaMerge.inputs[0])
     l.new(dilate.outputs[0], setAlphaMerge.inputs[1])
     l.new(setAlphaMerge.outputs[0], alphaMerge.inputs[1])
     l.new(freestyleRender.outputs[0], alphaMerge.inputs[2])
@@ -303,6 +302,7 @@ def removeRenderingFolder():
         os.replace(path, dst)
     return
 
+
 # back drop on
 def useBackDrop():
     a = bpy.context.area
@@ -311,6 +311,7 @@ def useBackDrop():
     space = a.spaces.active
     space.show_backdrop = True
     a.type = a_temp
+    return
 
 
 # join objects to clear non-manified edges
@@ -322,7 +323,7 @@ def objectJoin():
         else:
             ob.select = False
     bpy.ops.object.join()
-
+    return
 
 ################### add on setting section###########################
 bl_info = {
