@@ -19,8 +19,8 @@ def comicLineartNode():
     y = s.render.resolution_y * percentage / 100
     size = x if x >= y else y
 
-    edge_threshold += int( size / 500) * 40
-    line_thickness += int( size / 2000)
+    edge_threshold += int(size / 500) * 40
+    line_thickness += int(size / 2000)
 
     s.render.image_settings.file_format = 'PNG'
 
@@ -31,14 +31,12 @@ def comicLineartNode():
     s.render.use_edge_enhance = True
     s.render.edge_threshold = edge_threshold
 
-
     #s.render.layers.active.freestyle_settings.crease_angle = 1.2
-
 
     # render layer setting
     f = s.render.layers.active
-    f.name ="Freestyle"
-    r= s.render.layers.new( "RenderLayer")
+    f.name = "Freestyle"
+    r = s.render.layers.new("RenderLayer")
 
     r.use_freestyle = False
     r.use_pass_ambient_occlusion = True
@@ -49,7 +47,6 @@ def comicLineartNode():
     f.use_solid = False
     f.use_halo = False
     f.use_ztransp = False
-
 
     bpy.data.linestyles["LineStyle"].panel = "THICKNESS"
     bpy.data.linestyles["LineStyle"].thickness = line_thickness
@@ -71,7 +68,7 @@ def comicLineartNode():
     g = bpy.data.node_groups
 
     composite = n["Composite"]
-    composite.location = (1200, 100)
+    composite.location = (600, -600)
     render = n["Render Layers"]
     render.layer = 'RenderLayer'
 
@@ -83,39 +80,11 @@ def comicLineartNode():
 
     freestyleRender = n.new("CompositorNodeRLayers")
     freestyleRender.layer = 'Freestyle'
-    freestyleRender.location=(0,500)
-
-    alpha = n.new("CompositorNodeAlphaOver")
-    rgb2Bw = n.new("CompositorNodeRGBToBW")
-    val2Rgb = n.new("CompositorNodeValToRGB")
-    setAlpha = n.new("CompositorNodeSetAlpha")
-    dilate = n.new("CompositorNodeDilateErode")
-    viewer = n.new("CompositorNodeViewer")
-
-
-    rgb2Bw.location = (200, 100)
-    val2Rgb.location = (400, 100)
-    alpha.location = (900, 300)
-    setAlpha.location = (700, 500)
-    dilate.location = (400, 400)
-    viewer.location = (1300, 350)
-
-
-    rgb = n.new("CompositorNodeRGB")
-    alphaMerge = n.new("CompositorNodeAlphaOver")
-    setAlphaMerge = n.new("CompositorNodeSetAlpha")
-
-    rgb.location = (400, -200)
-    alphaMerge.location = (900, -200)
-    setAlphaMerge.location= (700, -200)
+    freestyleRender.location=(0,-400)
 
     render_ao = n.new(type="CompositorNodeRLayers")
-    dilate_ao = n.new("CompositorNodeDilateErode")
-    setAlpha_ao = n.new("CompositorNodeSetAlpha")
+    render_ao.location = (0, -800)
 
-    render_ao.location = (-200, -300)
-    dilate_ao.location = (100, -300)
-    setAlpha_ao.location = (200, -500)
     render_ao.scene = bpy.data.scenes["AO"]
     render_ao.layer = 'RenderLayer'
 
@@ -149,32 +118,144 @@ def comicLineartNode():
         l.new(setMix_obj.outputs[0], objectMaskOut.inputs[-1])
         return
 
-    objectPassIndexList = getObjectPassIndex()
-    for i, v in enumerate(objectPassIndexList):
-        makeNodeObIDMask(v, i)
+    #objectPassIndexList = getObjectPassIndex()
+    #for i, v in enumerate(objectPassIndexList):
+    #    makeNodeObIDMask(v, i)
 
-    l.new(render.outputs[0], rgb2Bw.inputs[0])
-    l.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
-    l.new(val2Rgb.outputs[0], setAlpha.inputs[0])
-    l.new(render.outputs['Alpha'], dilate.inputs[0])
-    l.new(dilate.outputs[0], setAlpha.inputs[1])
-    l.new(setAlpha.outputs[0], alpha.inputs[1])
-    l.new(alpha.outputs[0], viewer.inputs[0])
+    g_line = createLineartGroup()
+
+    line_group = n.new("CompositorNodeGroup")
+    line_group.location = (300, 0)
+    line_group.node_tree = g_line
+
+    # output to image files
+    import os
+    lineout = n.new("CompositorNodeOutputFile")
+    lineout.name = "line out"
+    lineout.location = (600, 0)
+    lineout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    lineout.file_slots.new("rendering_lineart")
+
+    grayout = n.new("CompositorNodeOutputFile")
+    grayout.name = "gray out"
+    grayout.location = (600, -200)
+    grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    grayout.file_slots.new("rendering_shadow")
+
+    aoout = n.new("CompositorNodeOutputFile")
+    aoout.name = "ao out"
+    aoout.location = (600, -400)
+    aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    aoout.file_slots.new("rendering_ao")
+
+    viewer = n.new("CompositorNodeViewer")
+    viewer.location = (600, 200)
+
+    l.new(line_group.outputs[0], lineout.inputs[-1])
+    l.new(line_group.outputs[3], grayout.inputs[-1])
+    l.new(line_group.outputs[2], aoout.inputs[-1])
+
+    l.new(render.outputs[0], line_group.inputs[0])
+    l.new(render.outputs["Alpha"], line_group.inputs[1])
+    l.new(freestyleRender.outputs[0], line_group.inputs[2])
+    l.new(freestyleRender.outputs["Alpha"], line_group.inputs[3])
+
+    l.new(render_ao.outputs["AO"], line_group.inputs[4])
+    l.new(render_ao.outputs["Alpha"], line_group.inputs[5])
+
+    l.new(line_group.outputs[1], composite.inputs[0])
+    l.new(line_group.outputs[1], viewer.inputs[0])
+
+    bpy.context.screen.scene = s
+    return
 
 
-    l.new(freestyleRender.outputs[0], alpha.inputs[2])
-    l.new(alpha.outputs[0], composite.inputs[0])
+def createLineartGroup():
+    s = bpy.context.scene
 
-    l.new(rgb.outputs[0], setAlphaMerge.inputs[0])
-    l.new(dilate.outputs[0], setAlphaMerge.inputs[1])
-    l.new(setAlphaMerge.outputs[0], alphaMerge.inputs[1])
-    l.new(freestyleRender.outputs[0], alphaMerge.inputs[2])
+    # nodes
+    s.use_nodes = True
 
-    l.new(render_ao.outputs['AO'],setAlpha_ao.inputs[0])
-    l.new(render_ao.outputs['AO'],dilate_ao.inputs[0])
-    l.new(render_ao.outputs['Alpha'], dilate_ao.inputs[0])
-    l.new(dilate_ao.outputs[0], setAlpha_ao.inputs[1])
+    n = s.node_tree.nodes
+    l = s.node_tree.links
+    g = bpy.data.node_groups
 
+    g_line = g.new("lineart", "CompositorNodeTree")
+    gn = g_line.nodes
+    gl = g_line.links
+
+    # group input
+    g_line.inputs.new("NodeSocketFloat", "render")
+    g_line.inputs.new("NodeSocketFloat", "render_alpha")
+    g_line.inputs.new("NodeSocketFloat", "freestyle")
+    g_line.inputs.new("NodeSocketFloat", "freestyle_alpha")
+    g_line.inputs.new("NodeSocketFloat", "ao")
+    g_line.inputs.new("NodeSocketFloat", "ao_alpha")
+
+    input_node = g_line.nodes.new("NodeGroupInput")
+    input_node.location = (0, 0)
+
+    # group output
+    g_line.outputs.new("NodeSocketFloat", "lineart")
+    g_line.outputs.new("NodeSocketFloat", "preview")
+    g_line.outputs.new("NodeSocketFloat", "ao")
+
+    output_node = g_line.nodes.new("NodeGroupOutput")
+    output_node.location = (1200, 0)
+
+    # nodes lineart
+    alpha = gn.new("CompositorNodeAlphaOver")
+    rgb2Bw = gn.new("CompositorNodeRGBToBW")
+    val2Rgb = gn.new("CompositorNodeValToRGB")
+    setAlpha = gn.new("CompositorNodeSetAlpha")
+    dilate = gn.new("CompositorNodeDilateErode")
+
+    rgb2Bw.location = (200, 100)
+    val2Rgb.location = (400, 100)
+    alpha.location = (900, 300)
+    setAlpha.location = (700, 500)
+    dilate.location = (400, 400)
+
+    #rgb = gn.new("CompositorNodeRGB")
+    #alphaMerge = gn.new("CompositorNodeAlphaOver")
+    setAlphaMerge = gn.new("CompositorNodeSetAlpha")
+
+    #rgb.location = (400, -200)
+    #alphaMerge.location = (900, -200)
+    setAlphaMerge.location= (700, -200)
+
+    dilate_ao = gn.new("CompositorNodeDilateErode")
+    setAlpha_ao = gn.new("CompositorNodeSetAlpha")
+
+    dilate_ao.location = (100, -300)
+    setAlpha_ao.location = (400, -500)
+
+    gl.new(input_node.outputs[0], rgb2Bw.inputs[0])
+    gl.new(rgb2Bw.outputs[0], val2Rgb.inputs[0])
+    gl.new(val2Rgb.outputs[0], setAlpha.inputs[0])
+    gl.new(input_node.outputs[1], dilate.inputs[0])
+    gl.new(dilate.outputs[0], setAlpha.inputs[1])
+    gl.new(setAlpha.outputs[0], alpha.inputs[1])
+
+    gl.new(input_node.outputs[3], output_node.inputs[0])
+    gl.new(alpha.outputs[0], output_node.inputs[1])
+
+    #gl.new(rgb.outputs[0], setAlphaMerge.inputs[0])
+    #gl.new(dilate.outputs[0], setAlphaMerge.inputs[1])
+    gl.new(setAlphaMerge.inputs[0], input_node.outputs[2])
+    gl.new(setAlphaMerge.inputs["Alpha"], input_node.outputs[3])
+
+    #gl.new(input_node.outputs[3], alphaMerge.inputs[2])
+
+    gl.new(input_node.outputs[4], setAlpha_ao.inputs[0])
+    gl.new(input_node.outputs[5], dilate_ao.inputs[0])
+    gl.new(dilate_ao.outputs[0], setAlpha_ao.inputs[1])
+
+    #gl.new(output_node.inputs[1], setAlpha.outputs[0])
+    gl.new(output_node.inputs[2], setAlpha_ao.outputs[0])
+    gl.new(output_node.inputs[3], setAlpha.outputs[0])
+
+    gl.new(setAlphaMerge.outputs[0], alpha.inputs[2])
 
     # gray setting
     val2Rgb.color_ramp.interpolation = 'CONSTANT'
@@ -186,73 +267,28 @@ def comicLineartNode():
 
     val2Rgb.color_ramp.elements[1].color = (1, 1, 1, 1)
     val2Rgb.color_ramp.elements[0].color = (0.279524, 0.279524, 0.279524, 1)
-    val2Rgb.color_ramp.elements[1].position=0.08
-    val2Rgb.color_ramp.elements[1].position=0.0
+    val2Rgb.color_ramp.elements[1].position = 0.08
+    val2Rgb.color_ramp.elements[1].position = 0.0
 
-    rgb.outputs[0].default_value = (1,1,1,1)
+    #rgb.outputs[0].default_value = (1, 1, 1, 1)
 
-    # output to image files
-    import os
-    lineout = n.new("CompositorNodeOutputFile")
-    lineout.name = "line out"
-    lineout.location = (200, 600)
-    lineout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    lineout.file_slots.new("rendering_lineart")
-
-    grayout = n.new("CompositorNodeOutputFile")
-    grayout.name = "gray out"
-    grayout.location = (1200, 600)
-    grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    grayout.file_slots.new("rendering_shadow")
-
-    aoout = n.new("CompositorNodeOutputFile")
-    aoout.name = "ao out"
-    aoout.location = (400, -400)
-    aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    aoout.file_slots.new("rendering_ao")
+    return g_line
 
 
-    l.new(freestyleRender.outputs[0], lineout.inputs[-1])
-    l.new(setAlpha.outputs[0], grayout.inputs[-1])
-    l.new(setAlpha_ao.outputs[0], aoout.inputs[-1])
-
-    bpy.context.screen.scene = s
-    return
-
-
-def baseLayerNode():
+def createBaseGroup():
     "make base render by using pass index"
     # pass index 1 to 10%, 2 to 20%, ...
     idMaskList = {1: 1, 2: 2, 3: 3, 4: 4}
 
     s = bpy.context.scene
-    r = s.render.layers.new("BaseLayer")
 
     BS_LOCATION_X = 0
     BS_LOCATION_Y = -600
 
-    s.render.layers["BaseLayer"].use_pass_material_index = True
-
     # nodes
     s.use_nodes = True
     m = bpy.data.materials
-    n = s.node_tree.nodes
-    l = s.node_tree.links
     g = bpy.data.node_groups
-
-    g_base = g.new("base", "CompositorNodeTree")
-    gn = g_base.nodes
-    gl = g_base.links
-    g_base.inputs.new("NodeSocketFloat", "index")
-    input_node = g_base.nodes.new("NodeGroupInput")
-    input_node.location = (0, 0)
-
-    out = n['Composite']
-
-    c = n.new(type="CompositorNodeRLayers")
-    c.location = (0, BS_LOCATION_Y + 2000)
-    c.name = "BaseLayer"
-    c.layer = 'BaseLayer'
 
     def createBase(i, v):
         id_mask = gn.new(type='CompositorNodeIDMask')
@@ -269,7 +305,6 @@ def baseLayerNode():
         gl.new(id_mask.outputs[0], mix.inputs[0])
         return mix
 
-
     def multiNode(i, pre_mix, mix):
         multi = gn.new(type='CompositorNodeMixRGB')
         multi.blend_type = 'MULTIPLY'
@@ -279,23 +314,19 @@ def baseLayerNode():
         gl.new(pre_mix.outputs[0], multi.inputs[2])
         return multi
 
-    def createOutput(pre):
-        import os
-        baseout = n.new("CompositorNodeOutputFile")
-        baseout.name = "base out"
-        baseout.location = (600, BS_LOCATION_Y + 2000)
-        baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-        baseout.file_slots.new("rendering_base")
-
-        l.new(pre.outputs[0], baseout.inputs[-1])
-        return
-
     def createGroupOutput(pre):
         g_base.outputs.new("NodeSocketFloat", "image")
         output_node = g_base.nodes.new("NodeGroupOutput")
         output_node.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
         gl.new(pre.outputs[0], output_node.inputs[-1])
         return
+
+    g_base = g.new("base", "CompositorNodeTree")
+    gn = g_base.nodes
+    gl = g_base.links
+    g_base.inputs.new("NodeSocketFloat", "index")
+    input_node = g_base.nodes.new("NodeGroupInput")
+    input_node.location = (0, 0)
 
     for i, v in idMaskList.items():
         mix = createBase(i, v)
@@ -305,11 +336,48 @@ def baseLayerNode():
             pre_mix = mix
     createGroupOutput(pre_mix)
 
+    return g_base
+
+
+def baseLayerNode():
+    "make base render by using pass index"
+
+    s = bpy.context.scene
+    r = s.render.layers.new("BaseLayer")
+
+    BS_LOCATION_X = 0
+    BS_LOCATION_Y = -600
+
+    s.render.layers["BaseLayer"].use_pass_material_index = True
+
+    # nodes
+    s.use_nodes = True
+    m = bpy.data.materials
+    n = s.node_tree.nodes
+    l = s.node_tree.links
+    g = bpy.data.node_groups
+
+    # make base node tree
+    g_base = createBaseGroup()
+    c = n.new(type="CompositorNodeRLayers")
+    c.location = (0, BS_LOCATION_Y + 2000)
+    c.name = "BaseLayer"
+    c.layer = 'BaseLayer'
+
     base_group = n.new("CompositorNodeGroup")
     base_group.location = (300, BS_LOCATION_Y+2000)
     base_group.node_tree = g_base
+
     l.new(c.outputs["IndexMA"], base_group.inputs[0])
-    createOutput(base_group)
+
+    import os
+    baseout = n.new("CompositorNodeOutputFile")
+    baseout.name = "base out"
+    baseout.location = (600, BS_LOCATION_Y + 2000)
+    baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    baseout.file_slots.new("rendering_base")
+
+    l.new(base_group.outputs[0], baseout.inputs[-1])
     return
 
 
