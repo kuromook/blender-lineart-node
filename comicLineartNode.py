@@ -229,7 +229,7 @@ def baseLayerNode():
     r = s.render.layers.new("BaseLayer")
 
     BS_LOCATION_X = 0
-    BS_LOCATION_Y = 3000
+    BS_LOCATION_Y = -600
 
     s.render.layers["BaseLayer"].use_pass_material_index = True
 
@@ -239,46 +239,62 @@ def baseLayerNode():
     n = s.node_tree.nodes
     l = s.node_tree.links
     g = bpy.data.node_groups
+
+    g_base = g.new("base", "CompositorNodeTree")
+    gn = g_base.nodes
+    gl = g_base.links
+    g_base.inputs.new("NodeSocketFloat", "index")
+    input_node = g_base.nodes.new("NodeGroupInput")
+    input_node.location = (0, 0)
+
     out = n['Composite']
 
     c = n.new(type="CompositorNodeRLayers")
-    c.location = (0, BS_LOCATION_Y + 1000)
+    c.location = (0, BS_LOCATION_Y + 2000)
     c.name = "BaseLayer"
     c.layer = 'BaseLayer'
 
     def createBase(i, v):
-        id_mask = n.new(type='CompositorNodeIDMask')
+        id_mask = gn.new(type='CompositorNodeIDMask')
         id_mask.index = i
         id_mask.location = (300, BS_LOCATION_Y + i*200)
 
-        mix = n.new(type='CompositorNodeMixRGB')
+        mix = gn.new(type='CompositorNodeMixRGB')
         mix.location = (600, BS_LOCATION_Y + i*200)
         val = 1.0-v*0.1
         mix.inputs[2].default_value = (val, val, val, 1)
         mix.name = str(i)
 
-        l.new(c.outputs["IndexMA"], id_mask.inputs[0])
-        l.new(id_mask.outputs[0], mix.inputs[0])
+        gl.new(input_node.outputs["index"], id_mask.inputs[0])
+        gl.new(id_mask.outputs[0], mix.inputs[0])
         return mix
 
+
     def multiNode(i, pre_mix, mix):
-        multi = n.new(type='CompositorNodeMixRGB')
+        multi = gn.new(type='CompositorNodeMixRGB')
         multi.blend_type = 'MULTIPLY'
         multi.location = (300 + i*300, BS_LOCATION_Y + i*200)
 
-        l.new(mix.outputs[0], multi.inputs[1])
-        l.new(pre_mix.outputs[0], multi.inputs[2])
+        gl.new(mix.outputs[0], multi.inputs[1])
+        gl.new(pre_mix.outputs[0], multi.inputs[2])
         return multi
 
     def createOutput(pre):
         import os
         baseout = n.new("CompositorNodeOutputFile")
         baseout.name = "base out"
-        baseout.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
+        baseout.location = (600, BS_LOCATION_Y + 2000)
         baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
         baseout.file_slots.new("rendering_base")
 
         l.new(pre.outputs[0], baseout.inputs[-1])
+        return
+
+    def createGroupOutput(pre):
+        g_base.outputs.new("NodeSocketFloat", "image")
+        output_node = g_base.nodes.new("NodeGroupOutput")
+        output_node.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
+        gl.new(pre.outputs[0], output_node.inputs[-1])
         return
 
     for i, v in idMaskList.items():
@@ -287,7 +303,13 @@ def baseLayerNode():
             pre_mix = multiNode(i, pre_mix, mix)
         else:
             pre_mix = mix
-    createOutput(pre_mix)
+    createGroupOutput(pre_mix)
+
+    base_group = n.new("CompositorNodeGroup")
+    base_group.location = (300, BS_LOCATION_Y+2000)
+    base_group.node_tree = g_base
+    l.new(c.outputs["IndexMA"], base_group.inputs[0])
+    createOutput(base_group)
     return
 
 
