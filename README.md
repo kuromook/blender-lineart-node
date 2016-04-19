@@ -7,6 +7,7 @@ blender の、主に漫画背景制作用途に作ったスクリプトです
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
+レンダラーを Blender Render に自動設定されます  
 
 |file name| 出力される画像|
 |:-----|:----------|
@@ -16,6 +17,11 @@ addon になっています
 |rendering_shadow001| 陰影のみ|
 |rendering_tex001| texture image を割り振ったオブジェクトのみ|
 
+![lineart](./readme_img/rendering_lineart0001.png)
+![lineart](./readme_img/rendering_shadow0001.png)
+![lineart](./readme_img/rendering_base0001.png)
+![lineart](./readme_img/rendering_ao0001.png)
+
 ### 作成の経緯
 単純に一枚の画像にレンダリング出力されると、clip studio paint で作業する際に不便を感じることが多かったため、後処理の利便の向上のために作成しました  
 ex.
@@ -23,13 +29,24 @@ ex.
 - 基本配色部分だけ薄くしたいor濃くしたい
 - 陰影を（物理法則通りではないけど、見た目上よくするために）調整したい
 
+### 陰影の調整
+node editor の colorRamp node で調整します  
+![corlor ramp](./readme_img/Image 132.jpg)
+![corlor ramp](./readme_img/Image 133.jpg)  
+backdrop を on にしておくと楽です  
+
+現状、ランプは点光源一つを前提としています  
+複雑な光源の配置や、cycles render でも利用は可能です
+
+
 ### pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
-マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% のみになっています）  
+マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% に対応付けしてあります）  
+![material pass index](./readme_img/Image 130.jpg)
 
 object pass index は properties -> object -> rerations -> pass index で設定します  
 object pass index に10000 を割り振ってあるオブジェクトのみ、rendering_tex001.png に出力されます  
-  
+(この内容はあとで追記します)  
 TODO
 - [ ] テクスチャのあるオブジェクトに対し、自動で pass index を割り振る
 
