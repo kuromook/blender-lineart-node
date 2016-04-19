@@ -69,6 +69,8 @@ def comicLineartNodeDivided():
     BS_LOCATION_Y = -600 + 2000
 
     # nodes
+    s = bpy.context.scene
+
     s.use_nodes = True
     m = bpy.data.materials
     n = s.node_tree.nodes
@@ -540,7 +542,7 @@ def baseLayerNode(num=0, name="BaseLayer", suffix=""):
         return r
 
     BS_LOCATION_X = 0
-    BS_LOCATION_Y = -600 +num*320
+    BS_LOCATION_Y = -600 +num*320 +3000
 
     # nodes
     s.use_nodes = True
@@ -582,9 +584,11 @@ def baseLayerNodeDivided():
     bpy.context.scene.render.alpha_mode = 'TRANSPARENT'
 
     BS_LOCATION_X = 1000
-    BS_LOCATION_Y = -600 + 2000
+    BS_LOCATION_Y = -600 + 3000
 
     # nodes
+    s = bpy.context.scene
+
     s.use_nodes = True
     m = bpy.data.materials
     n = s.node_tree.nodes
@@ -695,7 +699,8 @@ class ComicLineartNode(bpy.types.Operator):
         removeRenderingFolder()  
         useBackDrop()  
         baseLayerNode()
-        comicLineartNode()
+        comicLineartNodeDivided()
+        baseLayerNodeDivided()
         #objectJoin()
         return {'FINISHED'}
 
