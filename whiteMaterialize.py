@@ -13,7 +13,7 @@ def whiteMaterialize(name="lineartWhite"):
 # add lineart white material
 def addLineartMaterial(name="lineartWhite"):
     mat = bpy.data.materials.new(name)
-    mat.use_shadeless = True
+    mat.use_shadeless = False
     mat.diffuse_color = (float(1), float(1), float(1))
     return
 
