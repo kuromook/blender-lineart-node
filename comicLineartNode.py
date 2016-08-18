@@ -287,19 +287,21 @@ def createBaseGroup():
 
 ################### misc ###########################
 def renderLayerSetVisible(r, suffix=""):
-    for i in range(0, 15):
-        r.layers[i] = False
-    if suffix == "_front":
-        for i in range(0, 5):
+    typeA = [2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+    typeB = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0]
+
+    for i in range(20):
+        num = typeA[i]
+        if num == 0:
             r.layers[i] = True
-    elif suffix == "_middle":
-        for i in range(5, 10):
+        elif suffix == "_middle" and num == 2:
             r.layers[i] = True
-    elif suffix == "_back":
-        for i in range(10, 15):
+        elif suffix == "_front" and num == 1:
             r.layers[i] = True
-    for i in range(15, 20):
-        r.layers[i] = True
+        elif suffix == "_back" and num == 3:
+            r.layers[i] = True
+        else:
+            r.layers[i] = False
     return
 
 
@@ -514,13 +516,11 @@ def comicLineartNode(g_line, num=0, suffix=""):
     #l.new(render_ao.outputs["AO"], line_group.inputs[4])
     #l.new(render_ao.outputs["Alpha"], line_group.inputs[5])
 
-    l.new(line_group.outputs[1], composite.inputs[0])
-    viewer = n.new("CompositorNodeViewer")
-    viewer.location = (600, 200 + BS_LOCATION_Y)
-
-    if DEBUG:
+    if suffix=="_middle":
+        viewer = n.new("CompositorNodeViewer")
+        viewer.location = (600, 200 + BS_LOCATION_Y)
+        l.new(line_group.outputs[1], composite.inputs[0])
         l.new(line_group.outputs[1], viewer.inputs[0])
-
     bpy.context.screen.scene = s
     return line_group
 
@@ -607,11 +607,6 @@ def baseLayerNodeDivided():
     l.new(alpha2.inputs[2], alpha.outputs[0])
 
 
-    output = n.new("CompositorNodeComposite")
-    output.location = (900 + BS_LOCATION_X, y + BS_LOCATION_Y + 600)
-    if DEBUG:
-        l.new(alpha2.outputs[0], output.inputs[0])
-
     import os
     baseout = n.new("CompositorNodeOutputFile")
     baseout.name = "base out"
@@ -664,10 +659,6 @@ def comicLineartNodeDivided():
     l.new(back.outputs[3], alpha2.inputs[2])
     l.new(alpha.outputs[0], alpha2.inputs[0])
 
-    output = n.new("CompositorNodeComposite")
-    output.location = (900 + BS_LOCATION_X, y + BS_LOCATION_Y + 400)
-    if DEBUG:
-        l.new(alpha2.outputs[1], output.inputs[0])
 
     # output to image files
     import os
@@ -684,10 +675,6 @@ def comicLineartNodeDivided():
     grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     grayout.file_slots.new("rendering_shadow")
     l.new(alpha2.outputs[1], grayout.inputs[-1])
-    viewer = n.new("CompositorNodeViewer")
-    viewer.location = (900 + BS_LOCATION_X, BS_LOCATION_Y)
-    if DEBUG:
-        l.new(alpha2.outputs[1], viewer.inputs[0])
 
     return
 
