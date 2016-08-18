@@ -2,8 +2,10 @@
 this repository is scripts for blender.  
 
 blender の、主に漫画背景制作用途に作ったスクリプトです  
-
-# comicLineartNode.py
+# comiLineartNode.py  
+現在製作中、ちょっと問題あって保留してます  
+# comicLineartNodeOld.py
+comicLineartNode.pyの前のバージョン  
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
