@@ -373,7 +373,7 @@ import bpy
 
 
 class ComicLineartNodeDivided(bpy.types.Operator):
-    """lineart converter by Node"""
+    """lineart converter by Node divided"""
     bl_idname = "lineartdivided.comic"
     bl_label = "comic lineart node divided"
     bl_options = {'REGISTER', 'UNDO'}

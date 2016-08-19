@@ -5,6 +5,7 @@
 #http://opensource.org/licenses/mit-license.php
 
 import bpy
+from comicLineartMisc import *
 
 
 def comicLineartNode():
@@ -220,114 +221,9 @@ def comicLineartNode():
     return
 
 
-def baseLayerNode():
-    "make base render by using pass index"
-    # pass index 1 to 10%, 2 to 20%, ...
-    idMaskList = {1: 1, 2: 2, 3: 3, 4: 4}
-
-    s = bpy.context.scene
-    r = s.render.layers.new("BaseLayer")
-
-    BS_LOCATION_X = 0
-    BS_LOCATION_Y = 3000
-
-    s.render.layers["BaseLayer"].use_pass_material_index = True
-
-    # nodes
-    s.use_nodes = True
-    m = bpy.data.materials
-    n = s.node_tree.nodes
-    l = s.node_tree.links
-    g = bpy.data.node_groups
-    out = n['Composite']
-
-    c = n.new(type="CompositorNodeRLayers")
-    c.location = (0, BS_LOCATION_Y + 1000)
-    c.name = "BaseLayer"
-    c.layer = 'BaseLayer'
-
-    def createBase(i, v):
-        id_mask = n.new(type='CompositorNodeIDMask')
-        id_mask.index = i
-        id_mask.location = (300, BS_LOCATION_Y + i*200)
-
-        mix = n.new(type='CompositorNodeMixRGB')
-        mix.location = (600, BS_LOCATION_Y + i*200)
-        val = 1.0-v*0.1
-        mix.inputs[2].default_value = (val, val, val, 1)
-        mix.name = str(i)
-
-        l.new(c.outputs["IndexMA"], id_mask.inputs[0])
-        l.new(id_mask.outputs[0], mix.inputs[0])
-        return mix
-
-    def multiNode(i, pre_mix, mix):
-        multi = n.new(type='CompositorNodeMixRGB')
-        multi.blend_type = 'MULTIPLY'
-        multi.location = (300 + i*300, BS_LOCATION_Y + i*200)
-
-        l.new(mix.outputs[0], multi.inputs[1])
-        l.new(pre_mix.outputs[0], multi.inputs[2])
-        return multi
-
-    def createOutput(pre):
-        import os
-        baseout = n.new("CompositorNodeOutputFile")
-        baseout.name = "base out"
-        baseout.location = (600 + len(idMaskList)*300, BS_LOCATION_Y + len(idMaskList) * 200 - 400)
-        baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-        baseout.file_slots.new("rendering_base")
-
-        l.new(pre.outputs[0], baseout.inputs[-1])
-        return
-
-    for i, v in idMaskList.items():
-        mix = createBase(i, v)
-        if i > 1:
-            pre_mix = multiNode(i, pre_mix, mix)
-        else:
-            pre_mix = mix
-    createOutput(pre_mix)
-    return
-
-
-def removeRenderingFolder():
-    # avoid to backup file incrementaly
-    import os
-    import shutil
-    path = os.path.expanduser("~/Desktop/rendering/1")
-    dst = os.path.expanduser("~/Desktop/rendering/bk")
-    shutil.rmtree(dst, ignore_errors=True)
-    if os.path.exists(path):
-        os.replace(path, dst)
-    return
-
-
-# back drop on
-def useBackDrop():
-    a = bpy.context.area
-    a_temp = a.type
-    a.type = 'NODE_EDITOR'
-    space = a.spaces.active
-    space.show_backdrop = True
-    a.type = a_temp
-    return
-
-
-# join objects to clear non-manified edges
-def objectJoin():
-    for ob in bpy.context.scene.objects:
-        if ob.type == 'MESH':
-            ob.select = True
-            bpy.context.scene.objects.active = ob
-        else:
-            ob.select = False
-    bpy.ops.object.join()
-    return
-
 ################### add on setting section###########################
 bl_info = {
-    "name": "Convert Comic Lineart　Node",
+    "name": "Convert Comic Lineart Node AO",
     "category": "Object",
 }
 
