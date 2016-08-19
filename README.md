@@ -10,11 +10,8 @@ comicLineartNodeDivided.py 3枚の前中後の画像としてレンダリング�
 comicLineartGroup.py  使用するノードグループ生成  
 comicLineartMulti.py ノード生成に関係なさそうな処理を分けました。出力先フォルダの指定はここでやっています 
   
-# comicLineartNodeAO.py
-comicLineartNode.pyの前のバージョン  
-AO画像を生成します  
-AO画像用に scene を複製するため、スクリプト実行後にオブジェを動かすとAO画像にはオブジェの移動が反映されないという問題があります   
-（とはいえやはり欲しいと思うので、別の形でAO出力を組み合わせられるよう制作中）
+comicLineartAO.py AO出力用ノードを生成します（すでに同スクリプトにて生成済みの場合、再生成します）node を生成後に、新たにsceneにオブジェを追加した場合、再生成しないとao 出力画像に反映されません    
+
   
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
@@ -51,7 +48,7 @@ backdrop を on にしておくと楽です
 複雑な光源の配置や、cycles render でも利用は可能です
 
 
-### pass index の関係
+### material pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
 マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% に対応付けしてあります）  
 ![material pass index](./readme_img/Image 130.jpg)
@@ -60,8 +57,12 @@ material pass index は properties -> material -> options -> pass index で設�
 1-5番目のレイヤに属するオブジェクトを前景、6-10番目のレイヤに属するオブジェクトを中景、11-15番目のレイヤに属するオブジェクトを後景としてレンダリング出力し、最終的に合成したものを出力します。16-20番目のレイヤに属するオブジェクトはすべてのレンダリング画像に作用します（ランプなどを配置）
 
 それぞれに分割レンダリングすることにより、いっぺんにやるよりも負荷を抑えます
-また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります
-
+また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります  
+  
+# comicLineartNodeAO.py
+comicLineartNode.pyの前のバージョン  
+AO画像用に scene を複製するため、スクリプト実行後にオブジェを追加するとAO出力にはオブジェが反映されないという問題があります   
+  
 # proxify.py
 addon になってます
 link して取り込んだデータを proxy に変換し、group にまとめます  
