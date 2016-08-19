@@ -2,10 +2,16 @@
 this repository is scripts for blender.  
 
 blender の、主に漫画背景制作用途に作ったスクリプトです  
-# comiLineartNode.py  
-現在製作中、ちょっと問題あって保留してます  
+# comicLineartNode.py  
+現在製作中の分割型  
+レイヤを使って前中後景に分割します。手前側、奥側と言ったふうに分離することでキャラが間に挟まる構図に使えると同時に、情報量が多いデータの場合、blender が落ちるリスクを軽減します  
+最終合成のとこがちょっと問題あり
+  
 # comicLineartNodeOld.py
 comicLineartNode.pyの前のバージョン  
+AO画像を生成します  
+AO画像用に scene を複製するため、スクリプト実行後にオブジェを動かすとAO画像にはオブジェの移動が反映されません  
+  
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
