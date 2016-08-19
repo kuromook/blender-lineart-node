@@ -10,8 +10,7 @@ from comicLineartNodeGroup import *
 from comicLineartMisc import *
 
 DEBUG = False
-#RENDER_VISIBLE = [2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
-RENDER_VISIBLE= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+RENDER_VISIBLE = [2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
 
 
 ################### misc ###########################
@@ -25,8 +24,6 @@ def renderLayerSetVisible(r, suffix="", rendertype=RENDER_VISIBLE):
         else:
             r.layers[i] = False
     return
-
-
 
 ################### nodes parts ###########################
 
@@ -204,14 +201,13 @@ def comicLineartNode(g_line, num=0, suffix=""):
     #l.new(render_ao.outputs["AO"], line_group.inputs[4])
     #l.new(render_ao.outputs["Alpha"], line_group.inputs[5])
 
-    if suffix == "_middle" or suffix == "":
+    if suffix=="_middle":
         viewer = n.new("CompositorNodeViewer")
         viewer.location = (600, 200 + BS_LOCATION_Y)
         l.new(line_group.outputs[1], composite.inputs[0])
         l.new(line_group.outputs[1], viewer.inputs[0])
     bpy.context.screen.scene = s
     return line_group
-
 
 def baseLayerNode(num=0, name="BaseLayer", suffix=""):
     "base render node group by using pass index"
@@ -262,8 +258,8 @@ def baseLayerNode(num=0, name="BaseLayer", suffix=""):
     l.new(base_group.outputs[1], baseout.inputs[-1])
     return base_group
 
-
 ################### main compositor nodes ###########################
+
 def baseLayerNodeDivided():
     bpy.context.scene.render.alpha_mode = 'TRANSPARENT'
 
@@ -279,9 +275,22 @@ def baseLayerNodeDivided():
     l = s.node_tree.links
     g = bpy.data.node_groups
 
-    #front = baseLayerNode(num=1, name="BaseLayer_front", suffix="_front")
-    middle = baseLayerNode(num=2, name="BaseLayer", suffix="")
-    #back = baseLayerNode(num=3, name="BaseLayer_back", suffix="_back")
+    front = baseLayerNode(num=1, name="BaseLayer_front", suffix="_front")
+    middle = baseLayerNode(num=2, name="BaseLayer_middle", suffix="_middle")
+    back = baseLayerNode(num=3, name="BaseLayer_back", suffix="_back")
+
+    y = 0
+    before = None
+    alpha = n.new("CompositorNodeAlphaOver")
+    alpha.location = (300 + BS_LOCATION_X, y + BS_LOCATION_Y+ 300)
+    l.new(alpha.inputs[1], middle.outputs[1])
+    l.new(front.outputs[1], alpha.inputs[2])
+
+    alpha2 = n.new("CompositorNodeAlphaOver")
+    alpha2.location = (BS_LOCATION_X + 600, y + BS_LOCATION_Y + 600)
+    l.new(back.outputs[1], alpha2.inputs[1])
+    l.new(alpha2.inputs[2], alpha.outputs[0])
+
 
     import os
     baseout = n.new("CompositorNodeOutputFile")
@@ -290,16 +299,16 @@ def baseLayerNodeDivided():
     baseout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     baseout.file_slots.new("rendering_base")
 
-    l.new(middle.outputs[0], baseout.inputs[-1])
+    l.new(alpha2.outputs[0], baseout.inputs[-1])
 
     return
 
 
 def comicLineartNodeDivided():
     g_line = createLineartGroup()
-    #front = comicLineartNode(g_line, num=1, suffix="_front")
-    middle = comicLineartNode(g_line, num=2, suffix="")
-    #back = comicLineartNode(g_line, num=3, suffix="_back")
+    front = comicLineartNode(g_line, num=1, suffix="_front")
+    middle = comicLineartNode(g_line, num=2, suffix="_middle")
+    back = comicLineartNode(g_line, num=3, suffix="_back")
 
     BS_LOCATION_X = 1000
     BS_LOCATION_Y = -600 + 2000
@@ -314,6 +323,27 @@ def comicLineartNodeDivided():
     g = bpy.data.node_groups
 
     g_alphaline = createAlphaOverLineartGroup()
+    #base_group = n.new("CompositorNodeGroup")
+    #base_group.node_tree = g_alphaline
+
+    y = 0
+    before = None
+    alpha = n.new("CompositorNodeGroup")
+    alpha.node_tree = g_alphaline
+    alpha.location = (300 + BS_LOCATION_X, y + BS_LOCATION_Y+ 300)
+    l.new(middle.outputs[3], alpha.inputs[2])
+    l.new(front.outputs[3], alpha.inputs[3])
+    l.new(front.outputs[4], alpha.inputs[0])
+    l.new(middle.outputs[4], alpha.inputs[1])
+
+    alpha2 = n.new("CompositorNodeGroup")
+    alpha2.node_tree = g_alphaline
+    alpha2.location = (BS_LOCATION_X + 600, y + BS_LOCATION_Y + 600)
+    l.new(alpha.outputs[1], alpha2.inputs[3])
+    l.new(back.outputs[4], alpha2.inputs[1])
+    l.new(back.outputs[3], alpha2.inputs[2])
+    l.new(alpha.outputs[0], alpha2.inputs[0])
+
 
     # output to image files
     import os
@@ -322,14 +352,14 @@ def comicLineartNodeDivided():
     lineout.location = (900 + BS_LOCATION_X, BS_LOCATION_Y + 700)
     lineout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     lineout.file_slots.new("rendering_lineart")
-    l.new(middle.outputs[0], lineout.inputs[-1])
+    l.new(alpha2.outputs[0], lineout.inputs[-1])
 
     grayout = n.new("CompositorNodeOutputFile")
     grayout.name = "base out"
     grayout.location = (900 + BS_LOCATION_X, BS_LOCATION_Y + 1000)
     grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     grayout.file_slots.new("rendering_shadow")
-    l.new(middle.outputs[1], grayout.inputs[-1])
+    l.new(alpha2.outputs[1], grayout.inputs[-1])
 
     return
 
@@ -342,10 +372,10 @@ bl_info = {
 import bpy
 
 
-class ComicLineartNode(bpy.types.Operator):
+class ComicLineartNodeDivided(bpy.types.Operator):
     """lineart converter by Node"""
-    bl_idname = "lineart.comic"
-    bl_label = "comic lineart node"
+    bl_idname = "lineartdivided.comic"
+    bl_label = "comic lineart node divided"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context): 
@@ -360,11 +390,11 @@ class ComicLineartNode(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(ComicLineartNode)
+    bpy.utils.register_class(ComicLineartNodeDivided)
 
 
 def unregister():
-    bpy.utils.unregister_class(ComicLineartNode)
+    bpy.utils.unregister_class(ComicLineartNodeDivided)
 
 
 if __name__ == "__main__":

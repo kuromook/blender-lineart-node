@@ -334,10 +334,10 @@ bl_info = {
 import bpy
 
 
-class ComicLineartNodeOld(bpy.types.Operator):
+class ComicLineartNodeAO(bpy.types.Operator):
     """lineart converter by Node"""
-    bl_idname = "lineartgrayold.comic"
-    bl_label = "comic lineart node old"
+    bl_idname = "lineartao.comic"
+    bl_label = "comic lineart node AO"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context): 
@@ -351,11 +351,11 @@ class ComicLineartNodeOld(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(ComicLineartNodeOld)
+    bpy.utils.register_class(ComicLineartNodeAO)
 
 
 def unregister():
-    bpy.utils.unregister_class(ComicLineartNodeOld)
+    bpy.utils.unregister_class(ComicLineartNodeAO)
 
 
 if __name__ == "__main__":
