@@ -2,15 +2,19 @@
 this repository is scripts for blender.  
 
 blender の、主に漫画背景制作用途に作ったスクリプトです  
-# comicLineartNode.py  
-現在製作中の分割型  
-レイヤを使って前中後景に分割します。手前側、奥側と言ったふうに分離することでキャラが間に挟まる構図に使えると同時に、情報量が多いデータの場合、blender が落ちるリスクを軽減します  
-最終合成のとこがちょっと問題あり
+# comicLineartNode.py / comicLineartNodeDivided.py  
+レイヤを使って前中後景に別々にレンダリングします。手前側、奥側と言ったふうに分離することでキャラが間に挟まる構図に使えると同時に、情報量が多いデータの場合でも、blender が落ちるリスクを軽減できると考えています 
   
-# comicLineartNodeOld.py
+comicLineartNode.py １枚の画像としてレンダリング処理します（殆どの場合コレで問題ないと思います)  
+comicLineartNodeDivided.py 3枚の前中後の画像としてレンダリング処理します  
+comicLineartGroup.py  使用するノードグループ生成  
+comicLineartMulti.py ノード生成に関係なさそうな処理を分けました。出力先フォルダの指定はここでやっています 
+  
+# comicLineartNodeAO.py
 comicLineartNode.pyの前のバージョン  
 AO画像を生成します  
-AO画像用に scene を複製するため、スクリプト実行後にオブジェを動かすとAO画像にはオブジェの移動が反映されません  
+AO画像用に scene を複製するため、スクリプト実行後にオブジェを動かすとAO画像にはオブジェの移動が反映されないという問題があります   
+（とはいえやはり欲しいと思うので、別の形でAO出力を組み合わせられるよう制作中）
   
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
@@ -73,4 +77,5 @@ TODO
 # その他のファイル
 makeLineart.py 線画変換用の初期バージョン  
 comicResources.py 漫画背景用データ出力の別バージョン（不使用）  
-saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良します  
+saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良したい  
+whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします
