@@ -145,6 +145,7 @@ def createAlphaOverLineartGroup():
 
     alphaOver = gn.new("CompositorNodeAlphaOver")
     alphaOver.location = (600,100)
+    alphaOver.use_premultiply = True
 
     gl.new(input_node.outputs["lineart"], alphaOver.inputs[2])
     gl.new(input_node.outputs["lineart2"], alphaOver.inputs[1])
