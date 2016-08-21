@@ -34,7 +34,7 @@ def comicLineartNode(g_line, num=0, suffix=""):
     BS_LOCATION_X = 0
     BS_LOCATION_Y = 0 + num * 1200
 
-    def setFreestyle():
+    def setFreestyle(name):
         # line style setting
         line_thickness = 1.1
         edge_threshold = 44
@@ -57,11 +57,21 @@ def comicLineartNode(g_line, num=0, suffix=""):
         s.render.edge_threshold = edge_threshold
 
         #s.render.layers.active.freestyle_settings.crease_angle = 1.2
-
-        bpy.data.linestyles["LineStyle"].panel = "THICKNESS"
-        bpy.data.linestyles["LineStyle"].thickness = line_thickness
-        bpy.data.linestyles["LineStyle"].thickness_position = 'RELATIVE'
-        bpy.data.linestyles["LineStyle"].thickness_ratio = 0
+        freestyle = s.render.layers[name].freestyle_settings
+        freestyle.linesets["Freestyle"].linestyle.name = "Freestyle"
+ 
+        freestyle.use_smoothness = True  
+        bpy.data.linestyles["Freestyle"].panel = "THICKNESS"        
+        bpy.data.linestyles["Freestyle"].thickness = line_thickness
+        bpy.data.linestyles["Freestyle"].thickness_position = 'RELATIVE'
+        bpy.data.linestyles["Freestyle"].thickness_ratio = 0
+        #bpy.data.linestyles["Freestyle"].geometry_modifiers.new(name="bezier",type='BEZIER_CURVE')
+        #bpy.data.linestyles["Freestyle"].thickness_modifiers.new(name="irinuki", type="ALONG_STROKE")
+        
+        # ON HOLD
+        # creating curvemap object by python not supported, 
+        # then "irinuki" curve must create by UI or hard coding 
+        #bpy.data.linestyles['LineStyle'].thickness_modifiers["irinuki"].curves...
 
         return
 
@@ -87,19 +97,13 @@ def comicLineartNode(g_line, num=0, suffix=""):
         r.use_pass_ambient_occlusion = True
         return r
 
-    setFreestyle()
     f = createFreestyleRenderLayer(name="Freestyle"+suffix)
-    f.freestyle_settings.linesets.new('LineStyle')
+    f.freestyle_settings.linesets.new('Freestyle')
+    setFreestyle(name="Freestyle"+suffix)
+
     renderLayerSetVisible(f, suffix)
     r = createGrayRenderLayer(name="Gray"+suffix)
     renderLayerSetVisible(r, suffix)
-
-    #bpy.ops.scene.new(type="LINK_OBJECTS")
-    #aos = bpy.context.scene
-    #aos.name = "AO"
-    #w = bpy.data.worlds.new("AO")
-    #w.light_settings.use_ambient_occlusion = True
-    #aos.world = bpy.data.worlds["AO"]
 
     # nodes
     s.use_nodes = True
