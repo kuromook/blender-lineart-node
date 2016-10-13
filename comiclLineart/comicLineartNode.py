@@ -37,7 +37,7 @@ def comicLineartNode(g_line, num=0, suffix=""):
     BS_LOCATION_X = 0
     BS_LOCATION_Y = 0 + num * 1200
 
-    def setFreestyle():
+    def setFreestyle(name):
         # line style setting
         line_thickness = 1.1
         edge_threshold = 44
@@ -60,8 +60,11 @@ def comicLineartNode(g_line, num=0, suffix=""):
         s.render.use_edge_enhance = True
         s.render.edge_threshold = edge_threshold
         #s.render.layers.active.freestyle_settings.crease_angle = 1.2
-        freestyle = s.render.layers["Freestyle"].freestyle_settings
+        #freestyle = s.render.layers["Freestyle"].freestyle_settings
+        #freestyle.linesets["Freestyle"].linestyle.name = "Freestyle"
+        freestyle = s.render.layers[name].freestyle_settings
         freestyle.linesets["Freestyle"].linestyle.name = "Freestyle"
+
         freestyle.use_smoothness = True  
 
         bpy.data.linestyles["Freestyle"].panel = "THICKNESS"        
@@ -100,7 +103,7 @@ def comicLineartNode(g_line, num=0, suffix=""):
 
     f = createFreestyleRenderLayer(name="Freestyle"+suffix)
     f.freestyle_settings.linesets.new('Freestyle')
-    setFreestyle()
+    setFreestyle(name="Freestyle"+suffix)
 
     renderLayerSetVisible(f, suffix)
     r = createGrayRenderLayer(name="Gray"+suffix)
