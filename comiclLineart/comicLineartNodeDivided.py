@@ -49,6 +49,13 @@ def comicLineartNode(g_line, num=0, suffix=""):
 
         s.render.image_settings.file_format = 'PNG'
 
+        if "front" in suffix:
+            line_ratio = 5.0
+        elif "middle" in suffix:
+            line_ratio = 2.0
+        else:
+            line_ratio = 1.0
+
         s.render.use_freestyle = True
         s.render.alpha_mode = 'TRANSPARENT'
         s.render.image_settings.color_mode = 'RGBA'
@@ -57,14 +64,15 @@ def comicLineartNode(g_line, num=0, suffix=""):
         s.render.edge_threshold = edge_threshold
 
         #s.render.layers.active.freestyle_settings.crease_angle = 1.2
+        style_name = "Freestyle"+suffix
         freestyle = s.render.layers[name].freestyle_settings
-        freestyle.linesets["Freestyle"].linestyle.name = "Freestyle"
+        freestyle.linesets["Freestyle"].linestyle.name = style_name
  
         freestyle.use_smoothness = True  
-        bpy.data.linestyles["Freestyle"].panel = "THICKNESS"        
-        bpy.data.linestyles["Freestyle"].thickness = line_thickness
-        bpy.data.linestyles["Freestyle"].thickness_position = 'RELATIVE'
-        bpy.data.linestyles["Freestyle"].thickness_ratio = 0
+        bpy.data.linestyles[style_name].panel = "THICKNESS"        
+        bpy.data.linestyles[style_name].thickness = line_thickness * line_ratio
+        bpy.data.linestyles[style_name].thickness_position = 'RELATIVE'
+        bpy.data.linestyles[style_name].thickness_ratio = 0
         #bpy.data.linestyles["Freestyle"].geometry_modifiers.new(name="bezier",type='BEZIER_CURVE')
         #bpy.data.linestyles["Freestyle"].thickness_modifiers.new(name="irinuki", type="ALONG_STROKE")
         
