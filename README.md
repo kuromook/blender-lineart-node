@@ -59,6 +59,9 @@ material pass index は properties -> material -> options -> pass index で設�
 それぞれに分割レンダリングすることにより、いっぺんにやるよりも負荷を抑えます  
 また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります  
   
+### line style の設定
+現状は前景線画を5.5 / 中景 2.2 / 後景 1.1 として freestyle_front|freestyle_middle|freestyle_back という名前のline style を生成して割り振っています.linestyle modifier の along strokeに使用する curve object を apiからは作ることができないようだったので、スクリプトからの生成は見送りにしています.実用上、line style はimport /append やｆ初期設定ファイルから使用したほうがよいと考えているのでここは当面踏み込まないでおく方針です
+  
   
 # comicLineartNodeAO.py
 comicLineartNode.pyの前のバージョン  
