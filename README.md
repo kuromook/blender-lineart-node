@@ -17,7 +17,10 @@ addon になっています
 実行すると レンダリング設定用のノードを生成します  
 出力先はデスクトップの rendering/1 フォルダに設定されます  
 レンダラーを Blender Render に自動設定されます  
-
+  
+解説動画  
+https://www.youtube.com/watch?v=9hE5PdFVeTA&t=2s  
+  
 |file name| 出力される画像|
 |:-----|:----------|
 | rendering_base001 | Material Pass Index に準じた基本配色|
@@ -83,4 +86,4 @@ TODO
 makeLineart.py 線画変換用の初期バージョン  
 comicResources.py 漫画背景用データ出力の別バージョン（不使用）  
 saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良したい  
-whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします
+whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします　　
