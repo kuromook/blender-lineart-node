@@ -50,11 +50,11 @@ def comicLineartNode(g_line, num=0, suffix=""):
         s.render.image_settings.file_format = 'PNG'
 
         if "front" in suffix:
-            line_ratio = 5.0
+            line_ratio = 4.0
         elif "middle" in suffix:
-            line_ratio = 2.0
+            line_ratio = 2.5
         else:
-            line_ratio = 1.0
+            line_ratio = 1.5
 
         s.render.use_freestyle = True
         s.render.alpha_mode = 'TRANSPARENT'
