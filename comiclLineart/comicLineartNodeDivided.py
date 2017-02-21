@@ -59,6 +59,8 @@ def comicLineartNode(g_line, num=0, suffix=""):
         s.render.use_freestyle = True
         s.render.alpha_mode = 'TRANSPARENT'
         s.render.image_settings.color_mode = 'RGBA'
+        s.cycles.film_transparent = True
+
 
         s.render.use_edge_enhance = True
         s.render.edge_threshold = edge_threshold
@@ -67,18 +69,18 @@ def comicLineartNode(g_line, num=0, suffix=""):
         style_name = "Freestyle"+suffix
         freestyle = s.render.layers[name].freestyle_settings
         freestyle.linesets["Freestyle"].linestyle.name = style_name
- 
-        freestyle.use_smoothness = True  
-        bpy.data.linestyles[style_name].panel = "THICKNESS"        
+
+        freestyle.use_smoothness = True
+        bpy.data.linestyles[style_name].panel = "THICKNESS"
         bpy.data.linestyles[style_name].thickness = line_thickness * line_ratio
         bpy.data.linestyles[style_name].thickness_position = 'RELATIVE'
         bpy.data.linestyles[style_name].thickness_ratio = 0
         #bpy.data.linestyles["Freestyle"].geometry_modifiers.new(name="bezier",type='BEZIER_CURVE')
         #bpy.data.linestyles["Freestyle"].thickness_modifiers.new(name="irinuki", type="ALONG_STROKE")
-        
+
         # ON HOLD
-        # creating curvemap object by python not supported, 
-        # then "irinuki" curve must create by UI or hard coding 
+        # creating curvemap object by python not supported,
+        # then "irinuki" curve must create by UI or hard coding
         #bpy.data.linestyles['LineStyle'].thickness_modifiers["irinuki"].curves...
 
         return
@@ -390,10 +392,10 @@ class ComicLineartNodeDivided(bpy.types.Operator):
     bl_label = "comic lineart node divided"
     bl_options = {'REGISTER', 'UNDO'}
 
-    def execute(self, context): 
-        bpy.context.scene.render.engine = 'BLENDER_RENDER'   
-        removeRenderingFolder()  
-        useBackDrop()  
+    def execute(self, context):
+        bpy.context.scene.render.engine = 'BLENDER_RENDER'
+        removeRenderingFolder()
+        useBackDrop()
         baseLayerNode()
         comicLineartNodeDivided()
         baseLayerNodeDivided()
