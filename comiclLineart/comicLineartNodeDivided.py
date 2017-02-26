@@ -195,17 +195,18 @@ def comicLineartNode(g_line, num=0, suffix=""):
     grayout.base_path = os.path.expanduser("~/Desktop/rendering/1")
     grayout.file_slots.new("rendering_shadow"+suffix)
 
-    #aoout = n.new("CompositorNodeOutputFile")
-    #aoout.name = "ao out"
-    #aoout.location = (600, -400 + BS_LOCATION_Y)
-    #aoout.base_path = os.path.expanduser("~/Desktop/rendering/1")
-    #aoout.file_slots.new("rendering_ao"+suffix)
+    renderout = n.new("CompositorNodeOutputFile")
+    renderout.name = "render out"
+    renderout.location = (600, -400 + BS_LOCATION_Y)
+    renderout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    renderout.file_slots.new("rendering_render"+suffix)
 
 
 
     l.new(line_group.outputs[0], lineout.inputs[-1])
     l.new(line_group.outputs[3], grayout.inputs[-1])
     #l.new(line_group.outputs[2], aoout.inputs[-1])
+    l.new(render.outputs[0], renderout.inputs[-1])
 
     l.new(render.outputs[0], line_group.inputs[0])
     l.new(render.outputs["Alpha"], line_group.inputs[1])
