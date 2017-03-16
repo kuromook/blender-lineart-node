@@ -182,7 +182,7 @@ def comicLineartNode(g_line, num=0, suffix=""):
     line_group = n.new("CompositorNodeGroup")
     line_group.location = (300, 0 + BS_LOCATION_Y)
     line_group.node_tree = g_line
-
+    '''
     # output to image files
     import os
     lineout = n.new("CompositorNodeOutputFile")
@@ -209,7 +209,7 @@ def comicLineartNode(g_line, num=0, suffix=""):
     l.new(line_group.outputs[3], grayout.inputs[-1])
     #l.new(line_group.outputs[2], aoout.inputs[-1])
     l.new(render.outputs[0], renderout.inputs[-1])
-
+    '''
     l.new(render.outputs[0], line_group.inputs[0])
     l.new(render.outputs["Alpha"], line_group.inputs[1])
     l.new(freestyleRender.outputs[0], line_group.inputs[2])
@@ -237,8 +237,8 @@ def baseLayerNode(num=0, name="BaseLayer", suffix=""):
         r.use_pass_material_index = True
         return r
 
-    BS_LOCATION_X = 0
-    BS_LOCATION_Y = -600 +num*320 +3000
+    BS_LOCATION_X = 0 + 3000
+    BS_LOCATION_Y = -600 +num*320
 
     # nodes
     s.use_nodes = True
@@ -254,17 +254,17 @@ def baseLayerNode(num=0, name="BaseLayer", suffix=""):
     r = createBaseLayer(name)
     renderLayerSetVisible(r, suffix)
     c = n.new(type="CompositorNodeRLayers")
-    c.location = (0, BS_LOCATION_Y + 2000)
+    c.location = (BS_LOCATION_X, BS_LOCATION_Y + 2000)
     c.name = name
     c.layer = name
 
     base_group = n.new("CompositorNodeGroup")
-    base_group.location = (300, BS_LOCATION_Y+2000)
+    base_group.location = (BS_LOCATION_X + 300, BS_LOCATION_Y+2000)
     base_group.node_tree = g_base
 
     l.new(c.outputs["IndexMA"], base_group.inputs[0])
     l.new(c.outputs["Alpha"], base_group.inputs[1])
-
+    '''
     import os
     baseout = n.new("CompositorNodeOutputFile")
     baseout.name = "base out"
@@ -273,15 +273,16 @@ def baseLayerNode(num=0, name="BaseLayer", suffix=""):
     baseout.file_slots.new("rendering_base"+suffix)
 
     l.new(base_group.outputs[1], baseout.inputs[-1])
+    '''
     return base_group
 
 ################### main compositor nodes ###########################
 
-def baseLayerNodeDivided():
+def baseLayerNodeMass():
     bpy.context.scene.render.alpha_mode = 'TRANSPARENT'
 
-    BS_LOCATION_X = 1000
-    BS_LOCATION_Y = -600 + 3000
+    BS_LOCATION_X = 1000 + 3000
+    BS_LOCATION_Y = -600
 
     # nodes
     s = bpy.context.scene
@@ -292,22 +293,25 @@ def baseLayerNodeDivided():
     l = s.node_tree.links
     g = bpy.data.node_groups
 
-    front = baseLayerNode(num=1, name="BaseLayer_front", suffix="_front")
-    middle = baseLayerNode(num=2, name="BaseLayer_middle", suffix="_middle")
-    back = baseLayerNode(num=3, name="BaseLayer_back", suffix="_back")
+    bsn = [None for i in range(0,16)]
+    for i in range(1,16):
+        #rdr[i] = comicLineartNode(g_line, num=i, suffix="_"+str(i))
+        bsn[i] = baseLayerNode(num=i, name="BaseLayer_"+str(i), suffix="_" + str(i))
+
 
     y = 0
     before = None
     alpha = n.new("CompositorNodeAlphaOver")
     alpha.location = (300 + BS_LOCATION_X, y + BS_LOCATION_Y+ 300)
-    l.new(alpha.inputs[1], middle.outputs[1])
-    l.new(front.outputs[1], alpha.inputs[2])
+    l.new(alpha.inputs[1], bsn[2].outputs[1])
+    l.new(bsn[1].outputs[1], alpha.inputs[2])
 
-    alpha2 = n.new("CompositorNodeAlphaOver")
-    alpha2.location = (BS_LOCATION_X + 600, y + BS_LOCATION_Y + 600)
-    l.new(back.outputs[1], alpha2.inputs[1])
-    l.new(alpha2.inputs[2], alpha.outputs[0])
-
+    for i in range(3,16):
+        alpha2 = n.new("CompositorNodeAlphaOver")
+        alpha2.location = (BS_LOCATION_X + 600, y + BS_LOCATION_Y + 300 * (i-1))
+        l.new(bsn[i].outputs[1], alpha2.inputs[1])
+        l.new(alpha2.inputs[2], alpha.outputs[0])
+        alpha = alpha2
 
     import os
     baseout = n.new("CompositorNodeOutputFile")
@@ -323,21 +327,9 @@ def baseLayerNodeDivided():
 
 def comicLineartNodeMass():
     g_line = createLineartGroup()
-    front = comicLineartNode(g_line, num=1, suffix="_1")
-    middle = comicLineartNode(g_line, num=2, suffix="_2")
-    back = comicLineartNode(g_line, num=3, suffix="_3")
-    back = comicLineartNode(g_line, num=4, suffix="_4")
-    front = comicLineartNode(g_line, num=5, suffix="_5")
-    middle = comicLineartNode(g_line, num=6, suffix="_6")
-    back = comicLineartNode(g_line, num=7, suffix="_7")
-    front = comicLineartNode(g_line, num=8, suffix="_8")
-    middle = comicLineartNode(g_line, num=9, suffix="_9")
-    back = comicLineartNode(g_line, num=10, suffix="_10")
-    front = comicLineartNode(g_line, num=11, suffix="_11")
-    middle = comicLineartNode(g_line, num=12, suffix="_12")
-    back = comicLineartNode(g_line, num=13, suffix="_13")
-    front = comicLineartNode(g_line, num=14, suffix="_14")
-    middle = comicLineartNode(g_line, num=15, suffix="_15")
+    rdr = [None for i in range(0,16)]
+    for i in range(1,16):
+        rdr[i] = comicLineartNode(g_line, num=i, suffix="_"+str(i))
 
     BS_LOCATION_X = 1000
     BS_LOCATION_Y = -600 + 2000
@@ -360,18 +352,22 @@ def comicLineartNodeMass():
     alpha = n.new("CompositorNodeGroup")
     alpha.node_tree = g_alphaline
     alpha.location = (300 + BS_LOCATION_X, y + BS_LOCATION_Y+ 300)
-    l.new(middle.outputs[3], alpha.inputs[2])
-    l.new(front.outputs[3], alpha.inputs[3])
-    l.new(front.outputs[4], alpha.inputs[0])
-    l.new(middle.outputs[4], alpha.inputs[1])
+    l.new(rdr[2].outputs[3], alpha.inputs[2])
+    l.new(rdr[1].outputs[3], alpha.inputs[3])
+    l.new(rdr[1].outputs[4], alpha.inputs[0])
+    l.new(rdr[2].outputs[4], alpha.inputs[1])
 
-    alpha2 = n.new("CompositorNodeGroup")
-    alpha2.node_tree = g_alphaline
-    alpha2.location = (BS_LOCATION_X + 600, y + BS_LOCATION_Y + 600)
-    l.new(alpha.outputs[1], alpha2.inputs[3])
-    l.new(back.outputs[4], alpha2.inputs[1])
-    l.new(back.outputs[3], alpha2.inputs[2])
-    l.new(alpha.outputs[0], alpha2.inputs[0])
+
+    for i in range(3,16):
+        alpha2 = n.new("CompositorNodeGroup")
+        alpha2.node_tree = g_alphaline
+        alpha2.location = (BS_LOCATION_X + 300, y + BS_LOCATION_Y + 300 * (i-1))
+        l.new(alpha.outputs[1], alpha2.inputs[3])
+        l.new(rdr[i].outputs[4], alpha2.inputs[1])
+        l.new(rdr[i].outputs[3], alpha2.inputs[2])
+        l.new(alpha.outputs[0], alpha2.inputs[0])
+        alpha = alpha2
+
 
 
     # output to image files
@@ -403,7 +399,7 @@ import bpy
 
 class ComicLineartNodeMass(bpy.types.Operator):
     """lineart converter for mass scene"""
-    bl_idname = "lineartdivided.comic"
+    bl_idname = "lineartmass.comic"
     bl_label = "comic lineart node mass"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -413,7 +409,7 @@ class ComicLineartNodeMass(bpy.types.Operator):
         useBackDrop()
         baseLayerNode()
         comicLineartNodeMass()
-#        baseLayerNodeDivided()
+        baseLayerNodeMass()
         #objectJoin()
         return {'FINISHED'}
 
