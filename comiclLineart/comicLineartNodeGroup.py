@@ -33,6 +33,7 @@ def createLineartGroup():
     g_line.outputs.new("NodeSocketColor", "ao")
     g_line.outputs.new("NodeSocketColor", "gray")
     g_line.outputs.new("NodeSocketColor", "line_with_mask")
+    g_line.outputs.new("NodeSocketColor", "render")
 
     output_node = g_line.nodes.new("NodeGroupOutput")
     output_node.location = (1200, 0)
@@ -94,6 +95,8 @@ def createLineartGroup():
 
     gl.new(input_node.outputs[1], output_node.inputs[4])
 
+    # through render
+    gl.new(input_node.outputs[0], output_node.inputs[5])
     # gray setting
     val2Rgb.color_ramp.interpolation = 'CONSTANT'
     #val2Rgb.color_ramp.color_mode="HSV"
@@ -133,12 +136,15 @@ def createAlphaOverLineartGroup():
     g_alphaline.inputs.new("NodeSocketColor", "lineart2")
     g_alphaline.inputs.new("NodeSocketColor", "gray")
     g_alphaline.inputs.new("NodeSocketColor", "gray2")
+    g_alphaline.inputs.new("NodeSocketColor", "render")
+    g_alphaline.inputs.new("NodeSocketColor", "render2")
 
     input_node = g_alphaline.nodes.new("NodeGroupInput")
     input_node.location = (0, 0)
 
     g_alphaline.outputs.new("NodeSocketColor", "lineart")
     g_alphaline.outputs.new("NodeSocketColor", "gray")
+    g_alphaline.outputs.new("NodeSocketColor", "render")
 
     output_node = g_alphaline.nodes.new("NodeGroupOutput")
     output_node.location = (1000,0)
@@ -146,17 +152,22 @@ def createAlphaOverLineartGroup():
     alphaOver = gn.new("CompositorNodeAlphaOver")
     alphaOver.location = (600,100)
     alphaOver.use_premultiply = True
-
     gl.new(input_node.outputs["lineart"], alphaOver.inputs[2])
     gl.new(input_node.outputs["lineart2"], alphaOver.inputs[1])
     gl.new(alphaOver.outputs[0], output_node.inputs["lineart"])
 
     alphaOverGray = gn.new("CompositorNodeAlphaOver")
     alphaOverGray.location = (600, -200)
+    alphaOver.use_premultiply = True # ???
     gl.new(input_node.outputs["gray"], alphaOverGray.inputs[1])
     gl.new(input_node.outputs["gray2"], alphaOverGray.inputs[2])
     gl.new(output_node.inputs["gray"], alphaOverGray.outputs[0])
 
+    alphaOverRender = gn.new("CompositorNodeAlphaOver")
+    alphaOverRender.location = (600, -600)
+    gl.new(input_node.outputs["render"], alphaOverRender.inputs[1])
+    gl.new(input_node.outputs["render2"], alphaOverRender.inputs[2])
+    gl.new(output_node.inputs["render"], alphaOverRender.outputs[0])
     return g_alphaline
 
 
@@ -228,4 +239,3 @@ def createBaseGroup():
     createGroupOutput(pre_mix)
 
     return g_base
-

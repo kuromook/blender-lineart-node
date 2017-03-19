@@ -23,6 +23,8 @@ def renderLayerSetVisible(r, suffix="", rendertype=RENDER_VISIBLE):
             r.layers[i] = True
         elif rendertype[i] == dic[suffix]:
             r.layers[i] = True
+        elif i >= 15:
+            r.layers[i] = True
         else:
             r.layers[i] = False
     return
@@ -218,9 +220,9 @@ def comicLineartNode(g_line, num=0, suffix=""):
     #l.new(render_ao.outputs["AO"], line_group.inputs[4])
     #l.new(render_ao.outputs["Alpha"], line_group.inputs[5])
 
-    if suffix=="_15":
+    if suffix=="_1":
         viewer = n.new("CompositorNodeViewer")
-        viewer.location = (600, 200 + BS_LOCATION_Y)
+        viewer.location = (600, 200)
         l.new(line_group.outputs[1], composite.inputs[0])
         l.new(line_group.outputs[1], viewer.inputs[0])
     bpy.context.screen.scene = s
@@ -357,6 +359,8 @@ def comicLineartNodeMass():
     l.new(rdr[1].outputs[4], alpha.inputs[0])
     l.new(rdr[2].outputs[4], alpha.inputs[1])
 
+    l.new(rdr[2].outputs[5], alpha.inputs[4])
+    l.new(rdr[1].outputs[5], alpha.inputs[5])
 
     for i in range(3,16):
         alpha2 = n.new("CompositorNodeGroup")
@@ -366,6 +370,9 @@ def comicLineartNodeMass():
         l.new(rdr[i].outputs[4], alpha2.inputs[1])
         l.new(rdr[i].outputs[3], alpha2.inputs[2])
         l.new(alpha.outputs[0], alpha2.inputs[0])
+
+        l.new(alpha.outputs[2], alpha2.inputs["render2"])
+        l.new(rdr[i].outputs[5], alpha2.inputs["render"])
         alpha = alpha2
 
 
@@ -386,6 +393,12 @@ def comicLineartNodeMass():
     grayout.file_slots.new("rendering_shadow")
     l.new(alpha2.outputs[1], grayout.inputs[-1])
 
+    renderout = n.new("CompositorNodeOutputFile")
+    renderout.name = "render out"
+    renderout.location = (900 + BS_LOCATION_X, BS_LOCATION_Y + 1300)
+    renderout.base_path = os.path.expanduser("~/Desktop/rendering/1")
+    renderout.file_slots.new("rendering_render")
+    l.new(alpha2.outputs[2], renderout.inputs[-1])
     return
 
 ################### add on setting section###########################
