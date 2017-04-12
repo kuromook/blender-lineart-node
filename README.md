@@ -11,8 +11,6 @@ comicLineartNodeMass.py 15のレイヤに分割したものを１枚に結合し
 comicLineartGroup.py  使用するノードグループ生成  
 comicLineartMulti.py ノード生成に関係なさそうな処理を分けました。出力先フォルダの指定はここでやっています 
   
-comicLineartAO.py AO出力用ノードを生成します（すでに同スクリプトにて生成済みの場合、再生成します）node を生成後に、新たにsceneにオブジェを追加した場合、再生成しないとao 出力画像に反映されません    
-
   
 addon になっています  
 実行すると レンダリング設定用のノードを生成します  
@@ -25,7 +23,6 @@ https://www.youtube.com/watch?v=9hE5PdFVeTA&t=2s
 |file name| 出力される画像|
 |:-----|:----------|
 | rendering_base001 | Material Pass Index に準じた基本配色|
-| rendering_AO001 | Ambient Occrusion のみ|
 |rendering_lineart001| 線画のみ|
 |rendering_shadow001| 陰影のみ|
 
@@ -46,13 +43,13 @@ backdrop を on にしておくと楽です
 現状、ランプは点光源一つを前提としています  
 複雑な光源の配置や、cycles render でも利用は可能です  
 
-### layer による前景・中景・後景に分解
+### layer による前景・中景・後景に分解 (comicLineartNodeDivided.py)
 1-5番目のレイヤに属するオブジェクトを中景、6-10番目のレイヤに属するオブジェクトを背景、11-15番目のレイヤに属するオブジェクトを手前側の前景としてレンダリング出力し、最終的に合成したものを出力します。16-20番目のレイヤに属するオブジェクトはすべてのレンダリング画像に作用します（ランプなどを配置）
 ![lineart](./readme_img/divided.png)
 それぞれに分割レンダリングすることにより、いっぺんにやるよりも負荷を抑えます  
 また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります  
   
-### Mass 15分割
+### 15分割 (comicLineartNodeMass.py)
 1-15番レイヤに属するオブジェクトをそれぞれレンダリングし、ノードで結合して出力します  
 街の景観など、情報量の多くメモリ等の問題からレンダリングが困難な場合に使用します  
 ![景観](./readme_img/mass2.png)  
@@ -71,22 +68,14 @@ material pass index は properties -> material -> options -> pass index で設�
   
 # comicLineartNodeAO.py
 comicLineartNode.pyの前のバージョン  
-AO画像用に scene を複製するため、スクリプト実行後にオブジェを追加するとAO出力にはオブジェが反映されないという問題があります   
+comicLineartAO.py AO出力用ノードを生成します（すでに同スクリプトにて生成済みの場合、再生成します）node を生成後に、新たにsceneにオブジェを追加した場合、再生成しないとao 出力画像に反映されません    
+使いにくかったので凍結  
+
   
-# proxify.py
-addon になってます
-link して取り込んだデータを proxy に変換し、group にまとめます  
-大量に背景用オブジェをインポートするときのためのものです
-TODO 
-- [ ] 取り込む際の file 名を group 名に自動で割り振る
-
-# softenMirrorMergeLimit.py / softenArrayMergeLimit.py
-ミラー/アレイ モディファイアのマージリミットを一括して設定します。
-TODO
-- [ ] 現在アクティブなオブジェクト群のみを対象にする
-
 # その他のファイル
 makeLineart.py 線画変換用の初期バージョン  
 comicResources.py 漫画背景用データ出力の別バージョン（不使用）  
 saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良したい  
 whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします　　
+proxify.py link して取り込んだデータを proxy に変換し、group にまとめます  
+softenMirrorMergeLimit.py / softenArrayMergeLimit.py ミラー/アレイ モディファイアのマージリミットを一括して設定します。
