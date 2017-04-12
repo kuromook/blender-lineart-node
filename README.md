@@ -25,6 +25,7 @@ https://www.youtube.com/watch?v=9hE5PdFVeTA&t=2s
 | rendering_base001 | Material Pass Index に準じた基本配色|
 |rendering_lineart001| 線画のみ|
 |rendering_shadow001| 陰影のみ|
+|rendering_render001| rendering画像|
 
 
 ### 作成の経緯
@@ -76,6 +77,6 @@ comicLineartAO.py AO出力用ノードを生成します（すでに同スクリ
 makeLineart.py 線画変換用の初期バージョン  
 comicResources.py 漫画背景用データ出力の別バージョン（不使用）  
 saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良したい  
-whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします　　
-proxify.py link して取り込んだデータを proxy に変換し、group にまとめます  
+whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします  
+proxify.py link して取り込んだデータを proxy に変換し、group にまとめます  
 softenMirrorMergeLimit.py / softenArrayMergeLimit.py ミラー/アレイ モディファイアのマージリミットを一括して設定します。
