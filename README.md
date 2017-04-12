@@ -53,7 +53,11 @@ backdrop を on にしておくと楽です
 また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります  
   
 ### Mass 15分割
-1-15番レイヤに属するオブジェクトをそれぞれレンダリングし、ノードで結合して出力します  
+1-15番レイヤに属するオブジェクトをそれぞれレンダリングし、ノードで結合して出力します  
+街の景観など、情報量の多くメモリ等の問題からレンダリングが困難な場合に使用します  
+![景観](./readme_img/mass2.png)  
+![景観](./readme_img/mass1.png)  
+![景観](./readme_img/mass3.png)  
   
 ### material pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
