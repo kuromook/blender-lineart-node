@@ -37,8 +37,8 @@ ex.
 
 ### 陰影の調整
 node editor の colorRamp node で調整します  
-![corlor ramp](./readme_img/Image 132.jpg)
-![corlor ramp](./readme_img/Image 133.jpg)  
+![corlor ramp](./readme_img/colorramp2.png)
+![corlor ramp](./readme_img/colorramp1.png)  
 backdrop を on にしておくと楽です  
 
 現状、ランプは点光源一つを前提としています  
@@ -60,7 +60,7 @@ backdrop を on にしておくと楽です
 ### material pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
 マンガ原稿側で、10% トーンを割り振るマテリアルに pass index を 1に、 20% を割り振るマテリアルに pass indx を 2に、という具合に割り振ります。（現状、1:10%, 2:20%, 3:30%, 4:40% に対応付けしてあります）  
-![material pass index](./readme_img/Image 130.jpg)
+<!-- ![material pass index](./readme_img/Image 130.jpg) -->
 
   
 ### line style の設定
