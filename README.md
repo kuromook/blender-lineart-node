@@ -79,4 +79,5 @@ comicResources.py 漫画背景用データ出力の別バージョン（不使�
 saveName.py ちょっとした文字列データをテキストブロックに保存するため。そのうち改良したい  
 whiteMaterialize.py 元々あるマテリアルとランプを全て削除し、まっさらのマテリアルを割り振りします  
 proxify.py link して取り込んだデータを proxy に変換し、group にまとめます  
-softenMirrorMergeLimit.py / softenArrayMergeLimit.py ミラー/アレイ モディファイアのマージリミットを一括して設定します。
+softenMirrorMergeLimit.py ミラー モディファイアのマージリミットを一括して設定します。  
+softenArrayMergeLimit.py アレイ モディファイアのマージリミットを一括して設定します。
