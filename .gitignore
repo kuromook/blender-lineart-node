@@ -1,4 +1,5 @@
 test*.py
 *.sublime-project
 *.sublime-workspace
-console_run.script.py
+renameRendering.exe
+onsole_run.script.py
