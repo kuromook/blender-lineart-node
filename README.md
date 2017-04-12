@@ -2,12 +2,13 @@
 this repository is scripts for blender.  
 
 blender の、主に漫画背景制作用途に作ったスクリプトです  
-# comicLineartNode.py / comicLineartNodeDivided.py  
+# comicLineartNode.py / comicLineartNodeDivided.py / comicLineartNodeMass.py
 レイヤを使って前中後景に別々にレンダリングします。手前側、奥側と言ったふうに分離することでキャラが間に挟まる構図に使えると同時に、情報量が多いデータの場合でも、blender が落ちるリスクを軽減できると考えています 
   
-comicLineartNode.py １枚の画像としてレンダリング処理します（殆どの場合コレで問題ないと思います)  
-comicLineartNodeDivided.py 3枚の前中後の画像としてレンダリング処理します  
-comicLineartGroup.py  使用するノードグループ生成  
+comicLineartNode.py 分割をせずレンダリングします（主に小物類に使用）  
+comicLineartNodeDivided.py 3枚の前中後に分割してレンダリング（中背景に使用）  
+comicLineartNodeMass.py 15のレイヤに分割したものを１枚に結合して処理（情報量の多い背景に使用）  
+comicLineartGroup.py  使用するノードグループ生成  
 comicLineartMulti.py ノード生成に関係なさそうな処理を分けました。出力先フォルダの指定はここでやっています 
   
 comicLineartAO.py AO出力用ノードを生成します（すでに同スクリプトにて生成済みの場合、再生成します）node を生成後に、新たにsceneにオブジェを追加した場合、再生成しないとao 出力画像に反映されません    
@@ -51,6 +52,8 @@ backdrop を on にしておくと楽です
 それぞれに分割レンダリングすることにより、いっぺんにやるよりも負荷を抑えます  
 また、前景・後景の間にキャラクターの絵が入る場合、マンガ制作ソフト側で扱いやすくなります  
   
+### Mass 15分割
+1-15番レイヤに属するオブジェクトをそれぞれレンダリングし、ノードで結合して出力します  
   
 ### material pass index の関係
 material pass index は properties -> material -> options -> pass index で設定します  
