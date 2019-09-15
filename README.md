@@ -1,5 +1,7 @@
 # blender-lineart-node
 this repository is scripts for blender.  
+blender 2.8が公開されましたが、現在 EEVEE レンダーにおける view layer のフィルタ出力が未実装のため  
+このリポジトリのアップデートを見合わせています。実装され次第対応します  
 
 blender の、主に漫画背景制作用途に作ったスクリプトです  
 # comicLineartNode.py / comicLineartNodeDivided.py / comicLineartNodeMass.py
